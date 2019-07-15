@@ -3,7 +3,6 @@ package com.cowboysmall.noblox;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
@@ -11,23 +10,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import static java.lang.Runtime.getRuntime;
 import static java.util.Arrays.copyOf;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class Server implements Runnable {
 
     private final ReadWriteLock dataGuard = new ReentrantReadWriteLock();
-    private final ReadWriteLock updateGuard = new ReentrantReadWriteLock();
 
     private final ConcurrentMap<SelectionKey, List<ByteBuffer>> data = new ConcurrentHashMap<>();
-    private final List<Update> updates = new LinkedList<>();
+
+    private final ExecutorService executorService =
+            newFixedThreadPool(getRuntime().availableProcessors() - 1);
+
 
     private final ByteBuffer buffer = ByteBuffer.allocate(2048);
 
-    private final Selector selector;
-
+    private Dispatcher dispatcher;
     private RequestHandler requestHandler;
 
     private boolean running = false;
@@ -39,13 +42,12 @@ public class Server implements Runnable {
 
         try {
 
-            selector = Selector.open();
+            dispatcher = new Dispatcher();
 
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
             serverSocketChannel.bind(new InetSocketAddress(address, port));
 
-            serverSocketChannel.configureBlocking(false);
-            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            dispatcher.registerInterest(serverSocketChannel, SelectionKey.OP_ACCEPT);
 
         } catch (Exception e) {
 
@@ -63,10 +65,7 @@ public class Server implements Runnable {
 
             while (running) {
 
-                applyUpdates();
-
-                selector.select();
-                Set<SelectionKey> keys = selector.selectedKeys();
+                Set<SelectionKey> keys = dispatcher.getSelectedKeys();
                 for (SelectionKey key : keys)
                     if (key.isValid())
                         handleValid(key);
@@ -107,8 +106,7 @@ public class Server implements Runnable {
             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
             SocketChannel socketChannel = serverSocketChannel.accept();
 
-            socketChannel.configureBlocking(false);
-            socketChannel.register(selector, SelectionKey.OP_READ);
+            dispatcher.registerInterest(socketChannel, SelectionKey.OP_READ);
 
         } catch (Exception e) {
 
@@ -121,17 +119,19 @@ public class Server implements Runnable {
         try {
 
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-
-            buffer.clear();
             socketChannel.read(buffer);
 
-            byte[] updateData =
-                    requestHandler.handleRequest(
+            executorService.execute(
+                    new RequestHandlerAdapter(
+                            this,
+                            dispatcher,
+                            requestHandler,
+                            selectionKey,
                             copyOf(buffer.array(), buffer.position())
-                    );
+                    )
+            );
 
-            addData(selectionKey, updateData);
-            addUpdate(new Update(selectionKey, SelectionKey.OP_WRITE));
+            buffer.clear();
 
         } catch (Exception e) {
 
@@ -146,8 +146,11 @@ public class Server implements Runnable {
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
             dataGuard.writeLock().lock();
+
             for (ByteBuffer byteBuffer : data.get(selectionKey))
                 socketChannel.write(byteBuffer);
+            data.get(selectionKey).clear();
+
             dataGuard.writeLock().unlock();
 
             socketChannel.close();
@@ -162,33 +165,15 @@ public class Server implements Runnable {
 
     //_________________________________________________________________________
 
-    private void applyUpdates() {
-
-        updateGuard.writeLock().lock();
-        for (Update update : updates)
-            update.doUpdate();
-        updates.clear();
-        updateGuard.writeLock().unlock();
-    }
-
-
-    //_________________________________________________________________________
-
-    private void addUpdate(Update update) {
-
-        updateGuard.writeLock().lock();
-        updates.add(update);
-        updateGuard.writeLock().unlock();
-    }
-
-    private void addData(SelectionKey selectionKey, byte[] updateData) {
+    public void addData(SelectionKey selectionKey, byte[] updateData) {
 
         dataGuard.writeLock().lock();
+
         if (!data.containsKey(selectionKey))
             data.put(selectionKey, new LinkedList<>());
+        data.get(selectionKey).add(ByteBuffer.wrap(updateData));
 
-        this.data.get(selectionKey).add(ByteBuffer.wrap(updateData));
-        dataGuard.writeLock().lock();
+        dataGuard.writeLock().unlock();
     }
 
 

@@ -2,7 +2,7 @@ package com.cowboysmall.noblox;
 
 import java.nio.channels.SelectionKey;
 
-public class Update {
+public class DispatcherEvent {
 
     private SelectionKey selectionKey;
 
@@ -11,7 +11,7 @@ public class Update {
 
     //_________________________________________________________________________
 
-    public Update(SelectionKey selectionKey, int interestOps) {
+    public DispatcherEvent(SelectionKey selectionKey, int interestOps) {
 
         this.selectionKey = selectionKey;
         this.interestOps = interestOps;
@@ -20,7 +20,7 @@ public class Update {
 
     //_________________________________________________________________________
 
-    public void doUpdate() {
+    public void handle() {
 
         selectionKey.interestOps(interestOps);
     }
