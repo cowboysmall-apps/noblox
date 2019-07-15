@@ -5,9 +5,7 @@ import java.nio.channels.SelectionKey;
 public class RequestHandlerAdapter implements Runnable {
 
     private Server server;
-
     private Dispatcher dispatcher;
-
     private RequestHandler requestHandler;
 
     private SelectionKey selectionKey;

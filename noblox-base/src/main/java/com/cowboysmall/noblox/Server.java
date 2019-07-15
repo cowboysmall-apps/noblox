@@ -20,13 +20,11 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class Server implements Runnable {
 
-    private final ReadWriteLock dataGuard = new ReentrantReadWriteLock();
-
     private final ConcurrentMap<SelectionKey, List<ByteBuffer>> data = new ConcurrentHashMap<>();
+    private final ReadWriteLock dataGuard = new ReentrantReadWriteLock();
 
     private final ExecutorService executorService =
             newFixedThreadPool(getRuntime().availableProcessors() - 1);
-
 
     private final ByteBuffer buffer = ByteBuffer.allocate(2048);
 
@@ -146,11 +144,9 @@ public class Server implements Runnable {
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
             dataGuard.writeLock().lock();
-
             for (ByteBuffer byteBuffer : data.get(selectionKey))
                 socketChannel.write(byteBuffer);
             data.get(selectionKey).clear();
-
             dataGuard.writeLock().unlock();
 
             socketChannel.close();
@@ -168,11 +164,9 @@ public class Server implements Runnable {
     public void addData(SelectionKey selectionKey, byte[] updateData) {
 
         dataGuard.writeLock().lock();
-
         if (!data.containsKey(selectionKey))
             data.put(selectionKey, new LinkedList<>());
         data.get(selectionKey).add(ByteBuffer.wrap(updateData));
-
         dataGuard.writeLock().unlock();
     }
 

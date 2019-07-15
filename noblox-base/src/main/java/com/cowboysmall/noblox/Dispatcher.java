@@ -12,9 +12,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Dispatcher {
 
-    private final ReadWriteLock dispatcherEventGuard = new ReentrantReadWriteLock();
-
     private final List<DispatcherEvent> dispatcherEvents = new LinkedList<>();
+    private final ReadWriteLock dispatcherEventGuard = new ReentrantReadWriteLock();
 
     private final Selector selector;
 
@@ -32,11 +31,9 @@ public class Dispatcher {
     public Set<SelectionKey> getSelectedKeys() throws IOException {
 
         dispatcherEventGuard.writeLock().lock();
-
         for (DispatcherEvent dispatcherEvent : dispatcherEvents)
             dispatcherEvent.handle();
         dispatcherEvents.clear();
-
         dispatcherEventGuard.writeLock().unlock();
 
         selector.select();
