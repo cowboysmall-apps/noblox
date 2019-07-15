@@ -25,7 +25,6 @@ public class Server implements Runnable {
     private final List<Update> updates = new LinkedList<>();
 
     private final ByteBuffer buffer = ByteBuffer.allocate(2048);
-//    private final DataBuffer dataBuffer = new DataBuffer();
 
     private final Selector selector;
 
@@ -141,8 +140,6 @@ public class Server implements Runnable {
     }
 
     private void handleWrite(SelectionKey selectionKey) {
-
-        System.out.println(">>> handleWrite");
 
         try {
 
