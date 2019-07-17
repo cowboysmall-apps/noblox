@@ -1,20 +1,11 @@
 package com.cowboysmall.noblox;
 
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.LinkedList;
-import java.util.List;
 
-import static java.util.Arrays.copyOf;
+public class ReadWriteManager implements ChannelManager, Runnable {
 
-public class ReadWriteManager implements ChannelManager, Channel, Runnable {
-
-    private final ByteBuffer input = ByteBuffer.allocate(2048);
-    private final List<ByteBuffer> output = new LinkedList<>();
-
-//    private boolean readComplete;
-//    private boolean writeComplete;
+    private ChannelBuffer channelBuffer = new ChannelBuffer();
 
     private SelectionKey selectionKey;
     private Server server;
@@ -46,7 +37,7 @@ public class ReadWriteManager implements ChannelManager, Channel, Runnable {
     @Override
     public void run() {
 
-        server.getRequestHandler().handleRequest(this, copyOf(input.array(), input.position()));
+        server.getRequestHandler().handleRequest(channelBuffer, channelBuffer.bytesRead());
 
         server.getDispatcher().invokeLater(new DispatcherEvent(selectionKey, SelectionKey.OP_WRITE));
         server.getDispatcher().wakeup();
@@ -55,46 +46,12 @@ public class ReadWriteManager implements ChannelManager, Channel, Runnable {
 
     //_________________________________________________________________________
 
-    public void write(ByteBuffer byteBuffer) {
-
-        output.add(byteBuffer);
-    }
-
-    @Override
-    public void write(byte[] bytes) {
-
-        write(ByteBuffer.wrap(bytes));
-    }
-
-    @Override
-    public void write(String string) {
-
-        write(string.getBytes());
-    }
-
-    //_________________________________________________________________________
-
-//    public boolean isReadComplete() {
-//
-//        return readComplete;
-//    }
-//
-//    public boolean isWriteComplete() {
-//
-//        return writeComplete;
-//    }
-
-
-    //_________________________________________________________________________
-
     public void readFrom() {
 
         try {
 
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-            socketChannel.read(input);
-
-//            readComplete = true;
+            channelBuffer.readFrom((SocketChannel) selectionKey.channel());
+            run();
 
         } catch (Exception e) {
 
@@ -108,13 +65,10 @@ public class ReadWriteManager implements ChannelManager, Channel, Runnable {
 
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
-            for (ByteBuffer byteBuffer : output)
-                socketChannel.write(byteBuffer);
+            channelBuffer.writeTo(socketChannel);
 
             socketChannel.close();
             selectionKey.cancel();
-
-//            writeComplete = true;
 
         } catch (Exception e) {
 

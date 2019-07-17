@@ -28,17 +28,6 @@ public class Dispatcher {
 
     //_________________________________________________________________________
 
-//    public void acceptConnections() {
-//
-//        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-//        serverSocketChannel.bind(new InetSocketAddress(address, port));
-//
-//        registerInterest(serverSocketChannel, SelectionKey.OP_ACCEPT);
-//    }
-
-
-    //_________________________________________________________________________
-
     public Set<SelectionKey> getSelectedKeys() throws IOException {
 
         dispatcherEventGuard.writeLock().lock();
@@ -49,21 +38,6 @@ public class Dispatcher {
         selector.select();
         return selector.selectedKeys();
     }
-
-//    public void candidates() throws IOException {
-//
-//        dispatcherEventGuard.writeLock().lock();
-//        dispatcherEvents.forEach(DispatcherEvent::execute);
-//        dispatcherEvents.clear();
-//        dispatcherEventGuard.writeLock().unlock();
-//
-//        selector.select();
-//
-//        Set<SelectionKey> selectionKeys = selector.selectedKeys();
-//        selectionKeys.stream()
-//                .filter(SelectionKey::isValid)
-//                .map()
-//    }
 
     public void wakeup() {
 
