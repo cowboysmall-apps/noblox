@@ -30,7 +30,7 @@ public class RequestHandlerAdapter implements Runnable {
     @Override
     public void run() {
 
-        server.addData(selectionKey, requestHandler.handleRequest(input));
+//        server.addData(selectionKey, requestHandler.handleRequest(input));
 
         dispatcher.invokeLater(new DispatcherEvent(selectionKey, SelectionKey.OP_WRITE));
         dispatcher.wakeup();

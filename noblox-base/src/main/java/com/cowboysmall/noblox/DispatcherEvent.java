@@ -20,7 +20,7 @@ public class DispatcherEvent {
 
     //_________________________________________________________________________
 
-    public void handle() {
+    public void execute() {
 
         selectionKey.interestOps(interestOps);
     }

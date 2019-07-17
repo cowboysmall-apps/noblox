@@ -6,13 +6,10 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.Arrays.copyOf;
@@ -20,13 +17,15 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class Server implements Runnable {
 
-    private final ConcurrentMap<SelectionKey, List<ByteBuffer>> data = new ConcurrentHashMap<>();
-    private final ReadWriteLock dataGuard = new ReentrantReadWriteLock();
+    private final ConcurrentMap<SelectionKey, ReadWriteManager> channelManagers = new ConcurrentHashMap<>();
+
+//    private final ConcurrentMap<SelectionKey, List<ByteBuffer>> data = new ConcurrentHashMap<>();
+//    private final ReadWriteLock dataGuard = new ReentrantReadWriteLock();
 
     private final ExecutorService executorService =
             newFixedThreadPool(getRuntime().availableProcessors() - 1);
 
-    private final ByteBuffer buffer = ByteBuffer.allocate(2048);
+//    private final ByteBuffer buffer = ByteBuffer.allocateDirect(2048);
 
     private Dispatcher dispatcher;
     private RequestHandler requestHandler;
@@ -79,9 +78,14 @@ public class Server implements Runnable {
 
     //_________________________________________________________________________
 
-    public void setRequestHandler(RequestHandler requestHandler) {
+    public Dispatcher getDispatcher() {
 
-        this.requestHandler = requestHandler;
+        return dispatcher;
+    }
+
+    public RequestHandler getRequestHandler() {
+
+        return requestHandler;
     }
 
 
@@ -116,20 +120,20 @@ public class Server implements Runnable {
 
         try {
 
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-            socketChannel.read(buffer);
+//            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+//            socketChannel.read(buffer);
 
-            executorService.execute(
-                    new RequestHandlerAdapter(
-                            this,
-                            dispatcher,
-                            requestHandler,
-                            selectionKey,
-                            copyOf(buffer.array(), buffer.position())
-                    )
-            );
+//            executorService.execute(
+//                    new RequestHandlerAdapter(
+//                            this,
+//                            dispatcher,
+//                            requestHandler,
+//                            selectionKey,
+//                            copyOf(buffer.array(), buffer.position())
+//                    )
+//            );
 
-            buffer.clear();
+//            buffer.clear();
 
         } catch (Exception e) {
 
@@ -141,16 +145,16 @@ public class Server implements Runnable {
 
         try {
 
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-
-            dataGuard.writeLock().lock();
-            for (ByteBuffer byteBuffer : data.get(selectionKey))
-                socketChannel.write(byteBuffer);
-            data.get(selectionKey).clear();
-            dataGuard.writeLock().unlock();
-
-            socketChannel.close();
-            selectionKey.cancel();
+//            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+//
+//            dataGuard.writeLock().lock();
+//            for (ByteBuffer byteBuffer : data.get(selectionKey))
+//                socketChannel.write(byteBuffer);
+//            data.get(selectionKey).clear();
+//            dataGuard.writeLock().unlock();
+//
+//            socketChannel.close();
+//            selectionKey.cancel();
 
         } catch (Exception e) {
 
@@ -163,15 +167,21 @@ public class Server implements Runnable {
 
     public void addData(SelectionKey selectionKey, byte[] updateData) {
 
-        dataGuard.writeLock().lock();
-        if (!data.containsKey(selectionKey))
-            data.put(selectionKey, new LinkedList<>());
-        data.get(selectionKey).add(ByteBuffer.wrap(updateData));
-        dataGuard.writeLock().unlock();
+//        dataGuard.writeLock().lock();
+//        if (!data.containsKey(selectionKey))
+//            data.put(selectionKey, new LinkedList<>());
+//        data.get(selectionKey).add(ByteBuffer.wrap(updateData));
+//        dataGuard.writeLock().unlock();
     }
 
 
     //_________________________________________________________________________
+
+    public Server withRequestHandler(RequestHandler requestHandler) {
+
+        this.requestHandler = requestHandler;
+        return this;
+    }
 
     public Server start() {
 

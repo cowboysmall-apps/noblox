@@ -7,8 +7,8 @@ public class Application {
 
     public static void main(String... args) throws Exception {
 
-        Server server = new Server("localhost", 8080);
-        server.setRequestHandler(new HttpEchoHandler());
-        server.start();
+        new Server("localhost", 8080)
+                .withRequestHandler(new HttpEchoHandler())
+                .start();
     }
 }

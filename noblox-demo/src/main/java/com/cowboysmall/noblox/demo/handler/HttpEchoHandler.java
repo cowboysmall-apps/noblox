@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox.demo.handler;
 
+import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.RequestHandler;
 import com.cowboysmall.noblox.headers.HeaderBuilder;
 import com.cowboysmall.noblox.headers.HttpHeaderBuilder;
@@ -31,25 +32,18 @@ public class HttpEchoHandler implements RequestHandler {
 
     //_________________________________________________________________________
 
-    public HeaderBuilder getHeaderBuilder() {
-
-        return headerBuilder;
-    }
-
-    public void setHeaderBuilder(HeaderBuilder headerBuilder) {
-
-        this.headerBuilder = headerBuilder;
-    }
-
-
-    //_________________________________________________________________________
-
     @Override
-    public byte[] handleRequest(byte[] input) {
+    public void handleRequest(Channel channel, byte[] input) {
 
         Map<String, String> map = new HashMap<>();
         map.put(HttpHeaderBuilder.CONTENT_LENGTH, Integer.toString(input.length));
 
-        return format(HTTP_RESPONSE, headerBuilder.build(map), new String(input)).getBytes();
+        channel.write(
+                format(
+                        HTTP_RESPONSE,
+                        headerBuilder.build(map),
+                        new String(input)
+                )
+        );
     }
 }
