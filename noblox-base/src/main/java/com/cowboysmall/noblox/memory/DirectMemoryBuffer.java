@@ -2,14 +2,14 @@ package com.cowboysmall.noblox.memory;
 
 import java.nio.ByteBuffer;
 
-public class DirectBufferPool extends AbstractBufferPool {
+public class DirectMemoryBuffer extends AbstractMemoryBuffer {
 
-    public DirectBufferPool(int capacity) {
+    public DirectMemoryBuffer(int capacity) {
 
         super(ByteBuffer.allocateDirect(capacity));
     }
 
-    public DirectBufferPool() {
+    public DirectMemoryBuffer() {
 
         this(1024 * 4);
     }

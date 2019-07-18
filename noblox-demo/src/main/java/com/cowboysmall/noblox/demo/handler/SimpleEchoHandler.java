@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.io.ChannelWriter;
+import com.cowboysmall.noblox.channel.ChannelWriter;
 import com.cowboysmall.noblox.request.RequestHandler;
 
 public class SimpleEchoHandler implements RequestHandler {

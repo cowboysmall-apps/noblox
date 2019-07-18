@@ -1,8 +1,8 @@
 package com.cowboysmall.noblox.state;
 
-import com.cowboysmall.noblox.Server;
+import com.cowboysmall.noblox.ServerContext;
+import com.cowboysmall.noblox.channel.ChannelContext;
 import com.cowboysmall.noblox.dispatcher.DispatcherEvent;
-import com.cowboysmall.noblox.io.ChannelContext;
 
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -10,17 +10,17 @@ import java.nio.channels.SocketChannel;
 public class ReadHandler implements StateHandler, Runnable {
 
     private SelectionKey selectionKey;
-    private Server server;
+    private ServerContext serverContext;
+
     private ChannelContext channelContext;
 
 
     //_________________________________________________________________________
 
-    public ReadHandler(SelectionKey selectionKey, Server server, ChannelContext channelContext) {
+    public ReadHandler(SelectionKey selectionKey, ServerContext serverContext) {
 
         this.selectionKey = selectionKey;
-        this.server = server;
-        this.channelContext = channelContext;
+        this.serverContext = serverContext;
     }
 
 
@@ -32,11 +32,12 @@ public class ReadHandler implements StateHandler, Runnable {
         try {
 
             selectionKey.interestOps(0);
-
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+
+            channelContext = new ChannelContext(serverContext.getMemoryBuffer());
             channelContext.readFrom(socketChannel);
 
-            server.getExecutor().execute(this);
+            serverContext.getExecutor().execute(this);
 
         } catch (Exception e) {
 
@@ -50,7 +51,7 @@ public class ReadHandler implements StateHandler, Runnable {
     @Override
     public void run() {
 
-        server.getRequestHandler().handleRequest(channelContext, channelContext.bytesRead());
+        serverContext.getRequestHandler().handleRequest(channelContext, channelContext.bytesRead());
 
         DispatcherEvent dispatcherEvent =
                 new DispatcherEvent(
@@ -59,7 +60,7 @@ public class ReadHandler implements StateHandler, Runnable {
                         new WriteHandler(selectionKey, channelContext)
                 );
 
-        server.getDispatcher().invokeLater(dispatcherEvent);
-        server.getDispatcher().wakeup();
+        serverContext.getDispatcher().addDispatcherEvent(dispatcherEvent);
+        serverContext.getDispatcher().wakeup();
     }
 }

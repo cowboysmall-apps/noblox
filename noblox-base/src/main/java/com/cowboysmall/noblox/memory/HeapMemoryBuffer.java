@@ -2,14 +2,14 @@ package com.cowboysmall.noblox.memory;
 
 import java.nio.ByteBuffer;
 
-public class HeapBufferPool extends AbstractBufferPool {
+public class HeapMemoryBuffer extends AbstractMemoryBuffer {
 
-    public HeapBufferPool(int capacity) {
+    public HeapMemoryBuffer(int capacity) {
 
         super(ByteBuffer.allocate(capacity));
     }
 
-    public HeapBufferPool() {
+    public HeapMemoryBuffer() {
 
         this(1024 * 4);
     }

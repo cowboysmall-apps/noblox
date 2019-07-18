@@ -1,5 +1,7 @@
 package com.cowboysmall.noblox.dispatcher;
 
+import com.cowboysmall.noblox.state.StateHandler;
+
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -15,7 +17,6 @@ public class Dispatcher {
     private final List<DispatcherEvent> dispatcherEvents = new LinkedList<>();
     private final Lock lock = new ReentrantLock();
 
-
     private final Selector selector;
 
 
@@ -29,22 +30,12 @@ public class Dispatcher {
 
     //_________________________________________________________________________
 
-    public Set<SelectionKey> getSelectedKeys() throws IOException {
+    public void dispatch() throws IOException {
 
-        lock.lock();
-        try {
-
-            dispatcherEvents.forEach(DispatcherEvent::execute);
-            dispatcherEvents.clear();
-
-        } finally {
-
-            lock.unlock();
-        }
-
+        executeDispatcherEvents();
 
         selector.select();
-        return selector.selectedKeys();
+        handleState(selector.selectedKeys());
     }
 
     public void wakeup() {
@@ -64,7 +55,7 @@ public class Dispatcher {
 
     //_________________________________________________________________________
 
-    public void invokeLater(DispatcherEvent dispatcherEvent) {
+    public void addDispatcherEvent(DispatcherEvent dispatcherEvent) {
 
         lock.lock();
         try {
@@ -75,5 +66,40 @@ public class Dispatcher {
 
             lock.unlock();
         }
+    }
+
+
+    //_________________________________________________________________________
+
+    private void executeDispatcherEvents() {
+
+        lock.lock();
+        try {
+
+            dispatcherEvents.forEach(DispatcherEvent::execute);
+            dispatcherEvents.clear();
+
+        } finally {
+
+            lock.unlock();
+        }
+    }
+
+    private void handleState(Set<SelectionKey> selectionKeys) {
+
+        selectionKeys.stream()
+                .filter(SelectionKey::isValid)
+                .map(Dispatcher::extractStateHandler)
+                .forEach(StateHandler::handleState);
+
+        selectionKeys.clear();
+    }
+
+
+    //_________________________________________________________________________
+
+    private static StateHandler extractStateHandler(SelectionKey selectionKey) {
+
+        return (StateHandler) selectionKey.attachment();
     }
 }

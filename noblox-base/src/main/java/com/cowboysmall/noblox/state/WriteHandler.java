@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox.state;
 
-import com.cowboysmall.noblox.io.ChannelContext;
+import com.cowboysmall.noblox.channel.ChannelContext;
 
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -26,6 +26,8 @@ public class WriteHandler implements StateHandler {
     public void handleState() {
 
         try {
+
+            selectionKey.interestOps(0);
 
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
             channelContext.writeTo(socketChannel);

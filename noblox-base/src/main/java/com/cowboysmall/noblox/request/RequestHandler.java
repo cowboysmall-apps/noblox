@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox.request;
 
-import com.cowboysmall.noblox.io.ChannelWriter;
+import com.cowboysmall.noblox.channel.ChannelWriter;
 
 public interface RequestHandler {
 

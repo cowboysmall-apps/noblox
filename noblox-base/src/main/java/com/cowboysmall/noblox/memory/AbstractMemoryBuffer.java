@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public abstract class AbstractBufferPool implements BufferPool {
+public abstract class AbstractMemoryBuffer implements MemoryBuffer {
 
-    protected final ByteBuffer buffer;
+    protected final ByteBuffer byteBuffer;
 
 
     //_________________________________________________________________________
 
-    public AbstractBufferPool(ByteBuffer buffer) {
+    public AbstractMemoryBuffer(ByteBuffer byteBuffer) {
 
-        this.buffer = buffer;
+        this.byteBuffer = byteBuffer;
     }
 
 
@@ -22,11 +22,11 @@ public abstract class AbstractBufferPool implements BufferPool {
     @Override
     public byte[] readFrom(SocketChannel socketChannel) throws IOException {
 
-        socketChannel.read(buffer);
-        buffer.flip();
+        socketChannel.read(byteBuffer);
+        byteBuffer.flip();
 
-        byte[] bytes = new byte[buffer.remaining()];
-        buffer.get(bytes);
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get(bytes);
         return bytes;
     }
 }

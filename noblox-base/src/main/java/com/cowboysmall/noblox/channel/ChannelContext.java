@@ -1,6 +1,6 @@
-package com.cowboysmall.noblox.io;
+package com.cowboysmall.noblox.channel;
 
-import com.cowboysmall.noblox.memory.BufferPool;
+import com.cowboysmall.noblox.memory.MemoryBuffer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,15 +12,15 @@ public class ChannelContext implements ChannelWriter, ChannelBuffer {
 
     private List<ByteBuffer> output = new LinkedList<>();
 
-    private BufferPool bufferPool;
+    private MemoryBuffer memoryBuffer;
     private byte[] bytesRead;
 
 
     //_________________________________________________________________________
 
-    public ChannelContext(BufferPool bufferPool) {
+    public ChannelContext(MemoryBuffer memoryBuffer) {
 
-        this.bufferPool = bufferPool;
+        this.memoryBuffer = memoryBuffer;
     }
 
 
@@ -29,7 +29,7 @@ public class ChannelContext implements ChannelWriter, ChannelBuffer {
     @Override
     public void readFrom(SocketChannel socketChannel) throws IOException {
 
-        bytesRead = bufferPool.readFrom(socketChannel);
+        bytesRead = memoryBuffer.readFrom(socketChannel);
     }
 
     @Override

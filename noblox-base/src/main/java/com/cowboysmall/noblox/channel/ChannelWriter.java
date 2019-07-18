@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox.io;
+package com.cowboysmall.noblox.channel;
 
 import java.nio.ByteBuffer;
 

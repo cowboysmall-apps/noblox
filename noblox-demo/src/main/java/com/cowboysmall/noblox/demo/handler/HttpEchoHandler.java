@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.io.ChannelWriter;
+import com.cowboysmall.noblox.channel.ChannelWriter;
 import com.cowboysmall.noblox.request.RequestHandler;
 import com.cowboysmall.noblox.header.HeaderBuilder;
 import com.cowboysmall.noblox.header.HttpHeaderBuilder;
