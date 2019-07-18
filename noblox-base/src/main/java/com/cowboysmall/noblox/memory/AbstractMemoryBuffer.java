@@ -6,7 +6,7 @@ import java.nio.channels.SocketChannel;
 
 public abstract class AbstractMemoryBuffer implements MemoryBuffer {
 
-    protected final ByteBuffer byteBuffer;
+    private final ByteBuffer byteBuffer;
 
 
     //_________________________________________________________________________
@@ -22,6 +22,7 @@ public abstract class AbstractMemoryBuffer implements MemoryBuffer {
     @Override
     public byte[] readFrom(SocketChannel socketChannel) throws IOException {
 
+        byteBuffer.clear();
         socketChannel.read(byteBuffer);
         byteBuffer.flip();
 
