@@ -1,13 +1,13 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.RequestHandler;
+import com.cowboysmall.noblox.io.ChannelWriter;
+import com.cowboysmall.noblox.request.RequestHandler;
 
 public class SimpleEchoHandler implements RequestHandler {
 
     @Override
-    public void handleRequest(Channel channel, byte[] input) {
+    public void handleRequest(ChannelWriter channelWriter, byte[] input) {
 
-        channel.write(input);
+        channelWriter.write(input);
     }
 }

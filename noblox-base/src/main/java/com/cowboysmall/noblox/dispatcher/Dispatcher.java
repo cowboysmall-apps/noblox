@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.dispatcher;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
@@ -7,13 +7,14 @@ import java.nio.channels.Selector;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Dispatcher {
 
     private final List<DispatcherEvent> dispatcherEvents = new LinkedList<>();
-    private final ReadWriteLock dispatcherEventGuard = new ReentrantReadWriteLock();
+    private final Lock lock = new ReentrantLock();
+
 
     private final Selector selector;
 
@@ -30,10 +31,17 @@ public class Dispatcher {
 
     public Set<SelectionKey> getSelectedKeys() throws IOException {
 
-        dispatcherEventGuard.writeLock().lock();
-        dispatcherEvents.forEach(DispatcherEvent::execute);
-        dispatcherEvents.clear();
-        dispatcherEventGuard.writeLock().unlock();
+        lock.lock();
+        try {
+
+            dispatcherEvents.forEach(DispatcherEvent::execute);
+            dispatcherEvents.clear();
+
+        } finally {
+
+            lock.unlock();
+        }
+
 
         selector.select();
         return selector.selectedKeys();
@@ -43,6 +51,7 @@ public class Dispatcher {
 
         selector.wakeup();
     }
+
 
     //_________________________________________________________________________
 
@@ -57,8 +66,14 @@ public class Dispatcher {
 
     public void invokeLater(DispatcherEvent dispatcherEvent) {
 
-        dispatcherEventGuard.writeLock().lock();
-        dispatcherEvents.add(dispatcherEvent);
-        dispatcherEventGuard.writeLock().unlock();
+        lock.lock();
+        try {
+
+            dispatcherEvents.add(dispatcherEvent);
+
+        } finally {
+
+            lock.unlock();
+        }
     }
 }

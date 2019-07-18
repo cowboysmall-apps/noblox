@@ -1,10 +1,13 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.state;
+
+import com.cowboysmall.noblox.Server;
+import com.cowboysmall.noblox.io.ChannelContext;
 
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
-public class AcceptManager implements ChannelManager {
+public class AcceptHandler implements StateHandler {
 
     private SelectionKey selectionKey;
     private Server server;
@@ -12,7 +15,7 @@ public class AcceptManager implements ChannelManager {
 
     //_________________________________________________________________________
 
-    public AcceptManager(SelectionKey selectionKey, Server server) {
+    public AcceptHandler(SelectionKey selectionKey, Server server) {
 
         this.selectionKey = selectionKey;
         this.server = server;
@@ -22,7 +25,7 @@ public class AcceptManager implements ChannelManager {
     //_________________________________________________________________________
 
     @Override
-    public void execute() {
+    public void handleState() {
 
         try {
 
@@ -30,7 +33,7 @@ public class AcceptManager implements ChannelManager {
             SocketChannel socketChannel = serverSocketChannel.accept();
 
             SelectionKey selectionKey = server.getDispatcher().registerInterest(socketChannel, SelectionKey.OP_READ);
-            selectionKey.attach(new ReadWriteManager(selectionKey, server));
+            selectionKey.attach(new ReadHandler(selectionKey, server, new ChannelContext(server.getBufferPool())));
 
         } catch (Exception e) {
 

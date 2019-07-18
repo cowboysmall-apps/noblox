@@ -1,35 +1,32 @@
-package com.cowboysmall.noblox.io;
+package com.cowboysmall.noblox.memory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-import static java.util.Arrays.copyOf;
+public abstract class AbstractBufferPool implements BufferPool {
 
-public class DataBuffer {
-
-    private final ByteBuffer buffer;
+    protected final ByteBuffer buffer;
 
 
     //_________________________________________________________________________
 
-    public DataBuffer(int capacity) {
+    public AbstractBufferPool(ByteBuffer buffer) {
 
-        buffer = ByteBuffer.allocate(capacity);
-    }
-
-    public DataBuffer() {
-
-        this(2048);
+        this.buffer = buffer;
     }
 
 
     //_________________________________________________________________________
 
+    @Override
     public byte[] readFrom(SocketChannel socketChannel) throws IOException {
 
-        buffer.clear();
         socketChannel.read(buffer);
-        return copyOf(buffer.array(), buffer.position());
+        buffer.flip();
+
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return bytes;
     }
 }

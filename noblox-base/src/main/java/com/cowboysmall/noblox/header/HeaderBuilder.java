@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox.headers;
+package com.cowboysmall.noblox.header;
 
 import java.util.Map;
 

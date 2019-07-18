@@ -1,8 +1,8 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.io;
 
 import java.nio.ByteBuffer;
 
-public interface Channel {
+public interface ChannelWriter {
 
     void write(ByteBuffer byteBuffer);
 

@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox.headers;
+package com.cowboysmall.noblox.header;
 
 import com.cowboysmall.noblox.util.DateFormatter;
 import com.cowboysmall.noblox.util.HttpDateFormatter;
