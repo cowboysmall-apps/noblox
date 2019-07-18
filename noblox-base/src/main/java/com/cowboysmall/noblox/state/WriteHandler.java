@@ -28,8 +28,8 @@ public class WriteHandler implements StateHandler {
         try {
 
             selectionKey.interestOps(0);
-
             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+
             channelContext.writeTo(socketChannel);
 
             socketChannel.close();
