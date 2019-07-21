@@ -1,11 +1,11 @@
 package com.cowboysmall.noblox;
 
+import com.cowboysmall.noblox.dispatcher.Acceptor;
+import com.cowboysmall.noblox.dispatcher.Key;
+import com.cowboysmall.noblox.dispatcher.NIOAcceptor;
 import com.cowboysmall.noblox.state.AcceptHandler;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
 
 public class ServerBuilder {
 
@@ -40,12 +40,10 @@ public class ServerBuilder {
 
     public Server build() throws IOException {
 
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        serverSocketChannel.bind(new InetSocketAddress(address, port));
+        Acceptor acceptor = new NIOAcceptor(address, port);
 
-        SelectionKey selectionKey =
-                serverContext.getDispatcher().registerInterest(serverSocketChannel, SelectionKey.OP_ACCEPT);
-        selectionKey.attach(new AcceptHandler(selectionKey, serverContext));
+        Key key = serverContext.getDispatcher().registerAcceptInterest(acceptor);
+        key.attach(new AcceptHandler(acceptor, serverContext));
 
         return new Server().withServerContext(serverContext);
     }

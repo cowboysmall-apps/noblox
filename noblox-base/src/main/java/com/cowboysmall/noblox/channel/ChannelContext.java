@@ -1,42 +1,39 @@
 package com.cowboysmall.noblox.channel;
 
-import com.cowboysmall.noblox.memory.MemoryBuffer;
+import com.cowboysmall.noblox.dispatcher.Channel;
+import com.cowboysmall.noblox.memory.InputBuffer;
+import com.cowboysmall.noblox.memory.OutputBuffer;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.LinkedList;
-import java.util.List;
 
 public class ChannelContext implements ChannelWriter, ChannelBuffer {
 
-    private List<ByteBuffer> output = new LinkedList<>();
-
-    private MemoryBuffer memoryBuffer;
+    private OutputBuffer outputBuffer;
+    private InputBuffer inputBuffer;
     private byte[] bytesRead;
 
 
     //_________________________________________________________________________
 
-    public ChannelContext(MemoryBuffer memoryBuffer) {
+    public ChannelContext(InputBuffer inputBuffer, OutputBuffer outputBuffer) {
 
-        this.memoryBuffer = memoryBuffer;
+        this.inputBuffer = inputBuffer;
+        this.outputBuffer = outputBuffer;
     }
 
 
     //_________________________________________________________________________
 
     @Override
-    public void readFrom(SocketChannel socketChannel) throws IOException {
+    public void readFrom(Channel channel) throws IOException {
 
-        bytesRead = memoryBuffer.readFrom(socketChannel);
+        bytesRead = inputBuffer.readFrom(channel);
     }
 
     @Override
-    public void writeTo(SocketChannel socketChannel) throws IOException {
+    public void writeTo(Channel channel) throws IOException {
 
-        for (ByteBuffer byteBuffer : output)
-            socketChannel.write(byteBuffer);
+        channel.write(outputBuffer);
     }
 
     @Override
@@ -49,20 +46,14 @@ public class ChannelContext implements ChannelWriter, ChannelBuffer {
     //_________________________________________________________________________
 
     @Override
-    public void write(ByteBuffer byteBuffer) {
-
-        output.add(byteBuffer);
-    }
-
-    @Override
     public void write(byte[] bytes) {
 
-        write(ByteBuffer.wrap(bytes));
+        outputBuffer.append(bytes);
     }
 
     @Override
     public void write(String string) {
 
-        write(string.getBytes());
+        outputBuffer.append(string);
     }
 }

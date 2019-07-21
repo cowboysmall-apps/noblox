@@ -1,21 +1,20 @@
 package com.cowboysmall.noblox.state;
 
 import com.cowboysmall.noblox.channel.ChannelContext;
-
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
+import com.cowboysmall.noblox.dispatcher.Channel;
+import com.cowboysmall.noblox.dispatcher.Key;
 
 public class WriteHandler implements StateHandler {
 
-    private SelectionKey selectionKey;
+    private Key key;
     private ChannelContext channelContext;
 
 
     //_________________________________________________________________________
 
-    public WriteHandler(SelectionKey selectionKey, ChannelContext channelContext) {
+    public WriteHandler(Key key, ChannelContext channelContext) {
 
-        this.selectionKey = selectionKey;
+        this.key = key;
         this.channelContext = channelContext;
     }
 
@@ -27,13 +26,13 @@ public class WriteHandler implements StateHandler {
 
         try {
 
-            selectionKey.interestOps(0);
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+            key.interested(0);
+            Channel channel = key.getChannel();
 
-            channelContext.writeTo(socketChannel);
+            channelContext.writeTo(channel);
 
-            socketChannel.close();
-            selectionKey.cancel();
+            channel.close();
+            key.cancel();
 
         } catch (Exception e) {
 

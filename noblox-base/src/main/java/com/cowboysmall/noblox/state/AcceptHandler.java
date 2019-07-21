@@ -1,23 +1,21 @@
 package com.cowboysmall.noblox.state;
 
 import com.cowboysmall.noblox.ServerContext;
-import com.cowboysmall.noblox.channel.ChannelContext;
-
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import com.cowboysmall.noblox.dispatcher.Acceptor;
+import com.cowboysmall.noblox.dispatcher.Channel;
+import com.cowboysmall.noblox.dispatcher.Key;
 
 public class AcceptHandler implements StateHandler {
 
-    private SelectionKey selectionKey;
+    private Acceptor acceptor;
     private ServerContext serverContext;
 
 
     //_________________________________________________________________________
 
-    public AcceptHandler(SelectionKey selectionKey, ServerContext serverContext) {
+    public AcceptHandler(Acceptor acceptor, ServerContext serverContext) {
 
-        this.selectionKey = selectionKey;
+        this.acceptor = acceptor;
         this.serverContext = serverContext;
     }
 
@@ -29,11 +27,10 @@ public class AcceptHandler implements StateHandler {
 
         try {
 
-            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
-            SocketChannel socketChannel = serverSocketChannel.accept();
+            Channel channel = acceptor.accept();
 
-            SelectionKey selectionKey = serverContext.getDispatcher().registerInterest(socketChannel, SelectionKey.OP_READ);
-            selectionKey.attach(new ReadHandler(selectionKey, serverContext));
+            Key key = serverContext.getDispatcher().registerReadInterest(channel);
+            key.attach(new ReadHandler(key, serverContext));
 
         } catch (Exception e) {
 

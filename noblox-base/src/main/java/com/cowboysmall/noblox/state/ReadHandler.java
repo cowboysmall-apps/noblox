@@ -2,14 +2,17 @@ package com.cowboysmall.noblox.state;
 
 import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.channel.ChannelContext;
-import com.cowboysmall.noblox.dispatcher.DispatcherEvent;
+import com.cowboysmall.noblox.dispatcher.Channel;
+import com.cowboysmall.noblox.dispatcher.DispatcherUpdate;
+import com.cowboysmall.noblox.dispatcher.Key;
+import com.cowboysmall.noblox.dispatcher.NIODispatcherUpdate;
+import com.cowboysmall.noblox.memory.BasicNIOOutputBuffer;
 
 import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
 
 public class ReadHandler implements StateHandler, Runnable {
 
-    private SelectionKey selectionKey;
+    private Key key;
     private ServerContext serverContext;
 
     private ChannelContext channelContext;
@@ -17,9 +20,9 @@ public class ReadHandler implements StateHandler, Runnable {
 
     //_________________________________________________________________________
 
-    public ReadHandler(SelectionKey selectionKey, ServerContext serverContext) {
+    public ReadHandler(Key key, ServerContext serverContext) {
 
-        this.selectionKey = selectionKey;
+        this.key = key;
         this.serverContext = serverContext;
     }
 
@@ -31,11 +34,10 @@ public class ReadHandler implements StateHandler, Runnable {
 
         try {
 
-            selectionKey.interestOps(0);
-            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+            key.interested(0);
 
-            channelContext = new ChannelContext(serverContext.getMemoryBuffer());
-            channelContext.readFrom(socketChannel);
+            channelContext = new ChannelContext(serverContext.getInputBuffer(), new BasicNIOOutputBuffer());
+            channelContext.readFrom(key.getChannel());
 
             serverContext.getExecutor().execute(this);
 
@@ -53,14 +55,14 @@ public class ReadHandler implements StateHandler, Runnable {
 
         serverContext.getRequestHandler().handleRequest(channelContext, channelContext.bytesRead());
 
-        DispatcherEvent dispatcherEvent =
-                new DispatcherEvent(
-                        selectionKey,
+        DispatcherUpdate dispatcherUpdate =
+                new NIODispatcherUpdate(
+                        (SelectionKey) key.getKey(),
                         SelectionKey.OP_WRITE,
-                        new WriteHandler(selectionKey, channelContext)
+                        new WriteHandler(key, channelContext)
                 );
 
-        serverContext.getDispatcher().addDispatcherEvent(dispatcherEvent);
+        serverContext.getDispatcher().addDispatcherUpdate(dispatcherUpdate);
         serverContext.getDispatcher().wakeup();
     }
 }

@@ -4,7 +4,7 @@ import com.cowboysmall.noblox.state.StateHandler;
 
 import java.nio.channels.SelectionKey;
 
-public class DispatcherEvent {
+public class NIODispatcherUpdate implements DispatcherUpdate {
 
     private SelectionKey selectionKey;
 
@@ -14,7 +14,7 @@ public class DispatcherEvent {
 
     //_________________________________________________________________________
 
-    public DispatcherEvent(SelectionKey selectionKey, int interestOps, StateHandler stateHandler) {
+    public NIODispatcherUpdate(SelectionKey selectionKey, int interestOps, StateHandler stateHandler) {
 
         this.selectionKey = selectionKey;
         this.interestOps = interestOps;
@@ -24,17 +24,10 @@ public class DispatcherEvent {
 
     //_________________________________________________________________________
 
+    @Override
     public void execute() {
 
         selectionKey.attach(stateHandler);
         selectionKey.interestOps(interestOps);
-    }
-
-
-    //_________________________________________________________________________
-
-    public SelectionKey getSelectionKey() {
-
-        return selectionKey;
     }
 }

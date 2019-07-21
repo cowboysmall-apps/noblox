@@ -1,7 +1,7 @@
 package com.cowboysmall.noblox;
 
 import com.cowboysmall.noblox.dispatcher.Dispatcher;
-import com.cowboysmall.noblox.memory.MemoryBuffer;
+import com.cowboysmall.noblox.memory.InputBuffer;
 import com.cowboysmall.noblox.request.RequestHandler;
 import com.cowboysmall.noblox.thread.Executor;
 
@@ -10,7 +10,8 @@ public class ServerContext {
     private Dispatcher dispatcher;
     private RequestHandler requestHandler;
     private Executor executor;
-    private MemoryBuffer memoryBuffer;
+    private InputBuffer inputBuffer;
+
 
     //_________________________________________________________________________
 
@@ -29,17 +30,17 @@ public class ServerContext {
         return executor;
     }
 
-    public MemoryBuffer getMemoryBuffer() {
+    public InputBuffer getInputBuffer() {
 
-        return memoryBuffer;
+        return inputBuffer;
     }
 
 
     //_________________________________________________________________________
 
-    public ServerContext withDispatcher(Dispatcher dispatcher) {
+    public ServerContext withDispatcher(Dispatcher Dispatcher) {
 
-        this.dispatcher = dispatcher;
+        this.dispatcher = Dispatcher;
         return this;
     }
 
@@ -55,9 +56,9 @@ public class ServerContext {
         return this;
     }
 
-    public ServerContext withMemoryBuffer(MemoryBuffer memoryBuffer) {
+    public ServerContext withMemoryBuffer(InputBuffer inputBuffer) {
 
-        this.memoryBuffer = memoryBuffer;
+        this.inputBuffer = inputBuffer;
         return this;
     }
 }

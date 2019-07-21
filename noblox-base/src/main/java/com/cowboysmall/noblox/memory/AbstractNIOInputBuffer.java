@@ -1,17 +1,20 @@
 package com.cowboysmall.noblox.memory;
 
+import com.cowboysmall.noblox.dispatcher.Channel;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public abstract class AbstractMemoryBuffer implements MemoryBuffer {
+
+public abstract class AbstractNIOInputBuffer implements InputBuffer {
 
     private final ByteBuffer byteBuffer;
 
 
     //_________________________________________________________________________
 
-    public AbstractMemoryBuffer(ByteBuffer byteBuffer) {
+    public AbstractNIOInputBuffer(ByteBuffer byteBuffer) {
 
         this.byteBuffer = byteBuffer;
     }
@@ -20,10 +23,10 @@ public abstract class AbstractMemoryBuffer implements MemoryBuffer {
     //_________________________________________________________________________
 
     @Override
-    public byte[] readFrom(SocketChannel socketChannel) throws IOException {
+    public byte[] readFrom(Channel channel) throws IOException {
 
         byteBuffer.clear();
-        socketChannel.read(byteBuffer);
+        ((SocketChannel) channel.getChannel()).read(byteBuffer);
         byteBuffer.flip();
 
         byte[] bytes = new byte[byteBuffer.remaining()];
