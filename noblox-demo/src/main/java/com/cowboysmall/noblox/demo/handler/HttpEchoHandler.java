@@ -1,9 +1,9 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.channel.ChannelWriter;
-import com.cowboysmall.noblox.request.RequestHandler;
+import com.cowboysmall.noblox.Context;
 import com.cowboysmall.noblox.header.HeaderBuilder;
-import com.cowboysmall.noblox.header.HttpHeaderBuilder;
+import com.cowboysmall.noblox.header.http.HttpHeaderBuilder;
+import com.cowboysmall.noblox.RequestHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,16 +33,18 @@ public class HttpEchoHandler implements RequestHandler {
     //_________________________________________________________________________
 
     @Override
-    public void handleRequest(ChannelWriter channelWriter, byte[] input) {
+    public void handleRequest(Context context) {
+
+        byte[] bytesRead = context.getBytesRead();
 
         Map<String, String> map = new HashMap<>();
-        map.put(HttpHeaderBuilder.CONTENT_LENGTH, Integer.toString(input.length));
+        map.put(HttpHeaderBuilder.CONTENT_LENGTH, Integer.toString(bytesRead.length));
 
-        channelWriter.write(
+        context.getOutputBuffer().append(
                 format(
                         HTTP_RESPONSE,
                         headerBuilder.build(map),
-                        new String(input)
+                        new String(bytesRead)
                 )
         );
     }

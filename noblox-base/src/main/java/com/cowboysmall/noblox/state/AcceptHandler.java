@@ -1,9 +1,9 @@
 package com.cowboysmall.noblox.state;
 
 import com.cowboysmall.noblox.ServerContext;
-import com.cowboysmall.noblox.dispatcher.Acceptor;
-import com.cowboysmall.noblox.dispatcher.Channel;
-import com.cowboysmall.noblox.dispatcher.Key;
+import com.cowboysmall.noblox.Acceptor;
+import com.cowboysmall.noblox.Channel;
+import com.cowboysmall.noblox.Handle;
 
 public class AcceptHandler implements StateHandler {
 
@@ -29,8 +29,8 @@ public class AcceptHandler implements StateHandler {
 
             Channel channel = acceptor.accept();
 
-            Key key = serverContext.getDispatcher().registerReadInterest(channel);
-            key.attach(new ReadHandler(key, serverContext));
+            Handle handle = serverContext.getDispatcher().registerReadInterest(channel);
+            handle.setAttachment(new ReadHandler(handle, serverContext));
 
         } catch (Exception e) {
 

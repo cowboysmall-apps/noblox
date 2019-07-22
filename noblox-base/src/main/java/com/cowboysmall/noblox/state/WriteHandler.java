@@ -1,21 +1,20 @@
 package com.cowboysmall.noblox.state;
 
-import com.cowboysmall.noblox.channel.ChannelContext;
-import com.cowboysmall.noblox.dispatcher.Channel;
-import com.cowboysmall.noblox.dispatcher.Key;
+import com.cowboysmall.noblox.Context;
+import com.cowboysmall.noblox.Handle;
 
 public class WriteHandler implements StateHandler {
 
-    private Key key;
-    private ChannelContext channelContext;
+    private Handle handle;
+    private Context context;
 
 
     //_________________________________________________________________________
 
-    public WriteHandler(Key key, ChannelContext channelContext) {
+    public WriteHandler(Handle handle, Context context) {
 
-        this.key = key;
-        this.channelContext = channelContext;
+        this.handle = handle;
+        this.context = context;
     }
 
 
@@ -26,13 +25,10 @@ public class WriteHandler implements StateHandler {
 
         try {
 
-            key.interested(0);
-            Channel channel = key.getChannel();
+            handle.setInterested(0);
 
-            channelContext.writeTo(channel);
-
-            channel.close();
-            key.cancel();
+            context.getOutputBuffer().writeTo(handle.getChannel());
+            handle.cancel();
 
         } catch (Exception e) {
 

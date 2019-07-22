@@ -54,7 +54,12 @@
 
         <dependency>
             <groupId>com.cowboysmall.noblox</groupId>
-            <artifactId>noblox-base</artifactId>
+            <artifactId>noblox-nio</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cowboysmall.noblox</groupId>
+            <artifactId>noblox-proto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

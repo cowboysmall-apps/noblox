@@ -3,8 +3,10 @@ package com.cowboysmall.noblox.demo;
 import com.cowboysmall.noblox.ServerBuilder;
 import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.demo.handler.HttpEchoHandler;
-import com.cowboysmall.noblox.dispatcher.NIODispatcher;
-import com.cowboysmall.noblox.memory.DirectNIOInputBuffer;
+import com.cowboysmall.noblox.nio.NIOAcceptor;
+import com.cowboysmall.noblox.nio.NIODispatcher;
+import com.cowboysmall.noblox.nio.buffer.BasicNIOOutputBuffer;
+import com.cowboysmall.noblox.nio.buffer.DirectNIOInputBuffer;
 import com.cowboysmall.noblox.thread.AllAvailableCoresExecutor;
 
 public class Application {
@@ -12,14 +14,14 @@ public class Application {
     public static void main(String... args) throws Exception {
 
         new ServerBuilder()
-                .withAddress("localhost")
-                .withPort(8080)
+                .withAcceptor(new NIOAcceptor("localhost", 8080))
                 .withServerContext(
                         new ServerContext()
                                 .withDispatcher(new NIODispatcher())
-                                .withRequestHandler(new HttpEchoHandler())
+                                .withInputBuffer(new DirectNIOInputBuffer())
+                                .withOutputBufferClass(BasicNIOOutputBuffer.class)
                                 .withExecutor(new AllAvailableCoresExecutor())
-                                .withMemoryBuffer(new DirectNIOInputBuffer())
+                                .withRequestHandler(new HttpEchoHandler())
                 )
                 .build()
                 .start();
