@@ -1,11 +1,13 @@
 package com.cowboysmall.noblox.nio;
 
 import com.cowboysmall.noblox.Acceptor;
+import com.cowboysmall.noblox.AcceptorException;
 import com.cowboysmall.noblox.Channel;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
+
 
 public class NIOAcceptor implements Acceptor {
 
@@ -30,8 +32,15 @@ public class NIOAcceptor implements Acceptor {
     }
 
     @Override
-    public Channel accept() throws IOException {
+    public Channel accept() {
 
-        return new NIOChannel(serverSocketChannel.accept());
+        try {
+
+            return new NIOChannel(serverSocketChannel.accept());
+
+        } catch (Exception e) {
+
+            throw new AcceptorException(e);
+        }
     }
 }

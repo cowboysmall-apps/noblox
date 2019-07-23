@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox;
 
+
 public class Server implements Runnable {
 
     private ServerContext serverContext;
@@ -15,7 +16,7 @@ public class Server implements Runnable {
         try {
 
             while (running)
-                serverContext.getDispatcher().dispatch();
+                serverContext.getReactor().dispatch();
 
         } catch (Exception e) {
 

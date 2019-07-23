@@ -1,7 +1,5 @@
 package com.cowboysmall.noblox;
 
-import java.io.IOException;
-
 public interface Handle {
 
     Object getHandle();
@@ -10,7 +8,11 @@ public interface Handle {
 
     void setAttachment(Object object);
 
-    void setInterested(int ops);
+    void setNoInterest();
 
-    void cancel() throws IOException;
+    void setReadInterest();
+
+    void setWriteInterest();
+
+    void cancel();
 }

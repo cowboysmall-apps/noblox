@@ -1,14 +1,14 @@
 package com.cowboysmall.noblox;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class AbstractDispatcher implements Dispatcher {
 
-    private final List<DispatcherUpdate> dispatcherUpdates = new LinkedList<>();
+public abstract class AbstractReactor implements Reactor {
+
+    private final List<ReactorUpdate> reactorUpdates = new LinkedList<>();
 
     private final Lock lock = new ReentrantLock();
 
@@ -16,9 +16,9 @@ public abstract class AbstractDispatcher implements Dispatcher {
     //_________________________________________________________________________
 
     @Override
-    public void dispatch() throws IOException {
+    public void dispatch() {
 
-        executeDispatcherUpdates();
+        executeReactorUpdates();
 
         waitForSelected();
         handleSelected();
@@ -28,12 +28,12 @@ public abstract class AbstractDispatcher implements Dispatcher {
     //_________________________________________________________________________
 
     @Override
-    public void addDispatcherUpdate(DispatcherUpdate DispatcherUpdate) {
+    public void addReactorUpdate(ReactorUpdate reactorUpdate) {
 
         lock.lock();
         try {
 
-            dispatcherUpdates.add(DispatcherUpdate);
+            reactorUpdates.add(reactorUpdate);
 
         } finally {
 
@@ -41,13 +41,13 @@ public abstract class AbstractDispatcher implements Dispatcher {
         }
     }
 
-    private void executeDispatcherUpdates() {
+    private void executeReactorUpdates() {
 
         lock.lock();
         try {
 
-            dispatcherUpdates.forEach(DispatcherUpdate::execute);
-            dispatcherUpdates.clear();
+            reactorUpdates.forEach(ReactorUpdate::apply);
+            reactorUpdates.clear();
 
         } finally {
 
@@ -58,7 +58,7 @@ public abstract class AbstractDispatcher implements Dispatcher {
 
     //_________________________________________________________________________
 
-    protected abstract void waitForSelected() throws IOException;
+    protected abstract void waitForSelected();
 
     protected abstract void handleSelected();
 }

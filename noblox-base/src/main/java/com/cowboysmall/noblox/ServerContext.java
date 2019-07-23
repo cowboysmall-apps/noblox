@@ -1,24 +1,34 @@
 package com.cowboysmall.noblox;
 
-import com.cowboysmall.noblox.buffer.InputBuffer;
-import com.cowboysmall.noblox.buffer.OutputBuffer;
+import com.cowboysmall.noblox.buffer.Buffer;
+import com.cowboysmall.noblox.io.Reader;
+import com.cowboysmall.noblox.io.Writer;
 import com.cowboysmall.noblox.thread.Executor;
+
 
 public class ServerContext {
 
-    private Dispatcher dispatcher;
+    private Acceptor acceptor;
+    private Reactor reactor;
     private RequestHandler requestHandler;
     private Executor executor;
 
-    private InputBuffer inputBuffer;
-    private Class<? extends OutputBuffer> outputBufferClass;
+    private Reader reader;
+    private Writer writer;
+
+    private Class<? extends Buffer> bufferClass;
 
 
     //_________________________________________________________________________
 
-    public Dispatcher getDispatcher() {
+    public Acceptor getAcceptor() {
 
-        return dispatcher;
+        return acceptor;
+    }
+
+    public Reactor getReactor() {
+
+        return reactor;
     }
 
     public RequestHandler getRequestHandler() {
@@ -31,22 +41,33 @@ public class ServerContext {
         return executor;
     }
 
-    public InputBuffer getInputBuffer() {
+    public Reader getReader() {
 
-        return inputBuffer;
+        return reader;
     }
 
-    public OutputBuffer getOutputBuffer() throws Exception {
+    public Writer getWriter() {
 
-        return outputBufferClass.newInstance();
+        return writer;
+    }
+
+    public Buffer getBuffer() throws Exception {
+
+        return bufferClass.newInstance();
     }
 
 
     //_________________________________________________________________________
 
-    public ServerContext withDispatcher(Dispatcher Dispatcher) {
+    public ServerContext withAcceptor(Acceptor acceptor) {
 
-        this.dispatcher = Dispatcher;
+        this.acceptor = acceptor;
+        return this;
+    }
+
+    public ServerContext withDispatcher(Reactor Reactor) {
+
+        this.reactor = Reactor;
         return this;
     }
 
@@ -62,15 +83,21 @@ public class ServerContext {
         return this;
     }
 
-    public ServerContext withInputBuffer(InputBuffer inputBuffer) {
+    public ServerContext withReader(Reader reader) {
 
-        this.inputBuffer = inputBuffer;
+        this.reader = reader;
         return this;
     }
 
-    public ServerContext withOutputBufferClass(Class<? extends OutputBuffer> outputBufferClass) {
+    public ServerContext withWriter(Writer writer) {
 
-        this.outputBufferClass = outputBufferClass;
+        this.writer = writer;
+        return this;
+    }
+
+    public ServerContext withBufferClass(Class<? extends Buffer> bufferClass) {
+
+        this.bufferClass = bufferClass;
         return this;
     }
 }

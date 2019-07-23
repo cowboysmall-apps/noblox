@@ -2,6 +2,7 @@ package com.cowboysmall.noblox.thread;
 
 import java.util.concurrent.ExecutorService;
 
+
 public abstract class AbstractExecutor implements Executor {
 
     private final ExecutorService executorService;

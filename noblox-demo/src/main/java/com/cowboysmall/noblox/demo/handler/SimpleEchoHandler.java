@@ -1,13 +1,14 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.Context;
+import com.cowboysmall.noblox.RequestContext;
 import com.cowboysmall.noblox.RequestHandler;
+
 
 public class SimpleEchoHandler implements RequestHandler {
 
     @Override
-    public void handleRequest(Context context) {
+    public void handleRequest(RequestContext requestContext) {
 
-        context.getOutputBuffer().append(context.getBytesRead());
+        requestContext.getOutput().append(requestContext.getInput().getBytes());
     }
 }

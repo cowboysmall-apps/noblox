@@ -1,11 +1,12 @@
 package com.cowboysmall.noblox.nio;
 
 import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.buffer.InputBuffer;
-import com.cowboysmall.noblox.buffer.OutputBuffer;
+import com.cowboysmall.noblox.ChannelException;
+import com.cowboysmall.noblox.io.Reader;
+import com.cowboysmall.noblox.io.Writer;
 
-import java.io.IOException;
 import java.nio.channels.SocketChannel;
+
 
 public class NIOChannel implements Channel {
 
@@ -23,15 +24,29 @@ public class NIOChannel implements Channel {
     //_________________________________________________________________________
 
     @Override
-    public byte[] read(InputBuffer inputBuffer) throws IOException {
+    public byte[] read(Reader reader) {
 
-        return inputBuffer.readFrom(this);
+        try {
+
+            return reader.readFrom(this);
+
+        } catch (Exception e) {
+
+            throw new ChannelException(e);
+        }
     }
 
     @Override
-    public void write(OutputBuffer outputBuffer) throws IOException {
+    public void write(byte[] bytes, Writer writer) {
 
-        outputBuffer.writeTo(this);
+        try {
+
+            writer.writeTo(bytes, this);
+
+        } catch (Exception e) {
+
+            throw new ChannelException(e);
+        }
     }
 
     @Override

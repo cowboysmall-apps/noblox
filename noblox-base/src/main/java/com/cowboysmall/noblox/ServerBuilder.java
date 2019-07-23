@@ -1,23 +1,16 @@
 package com.cowboysmall.noblox;
 
-import com.cowboysmall.noblox.state.AcceptHandler;
+import com.cowboysmall.noblox.handler.AcceptHandler;
 
 import java.io.IOException;
 
-public class ServerBuilder {
 
-    private Acceptor acceptor;
+public class ServerBuilder {
 
     private ServerContext serverContext;
 
 
     //_________________________________________________________________________
-
-    public ServerBuilder withAcceptor(Acceptor acceptor) {
-
-        this.acceptor = acceptor;
-        return this;
-    }
 
     public ServerBuilder withServerContext(ServerContext serverContext) {
 
@@ -28,10 +21,10 @@ public class ServerBuilder {
 
     //_________________________________________________________________________
 
-    public Server build() throws IOException {
+    public Server build() {
 
-        Handle handle = serverContext.getDispatcher().registerAcceptInterest(acceptor);
-        handle.setAttachment(new AcceptHandler(acceptor, serverContext));
+        Handle handle = serverContext.getReactor().registerAcceptInterest(serverContext.getAcceptor());
+        handle.setAttachment(new AcceptHandler(serverContext));
 
         return new Server().withServerContext(serverContext);
     }

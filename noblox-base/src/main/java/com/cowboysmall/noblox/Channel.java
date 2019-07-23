@@ -1,15 +1,14 @@
 package com.cowboysmall.noblox;
 
-import com.cowboysmall.noblox.buffer.InputBuffer;
-import com.cowboysmall.noblox.buffer.OutputBuffer;
+import com.cowboysmall.noblox.io.Reader;
+import com.cowboysmall.noblox.io.Writer;
 
-import java.io.IOException;
 
 public interface Channel {
 
-    byte[] read(InputBuffer inputBuffer) throws IOException;
+    byte[] read(Reader reader);
 
-    void write(OutputBuffer outputBuffer) throws IOException;
+    void write(byte[] bytes, Writer writer);
 
     Object getChannel();
 }

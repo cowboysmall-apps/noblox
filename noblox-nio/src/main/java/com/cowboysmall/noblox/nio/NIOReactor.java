@@ -1,10 +1,11 @@
 package com.cowboysmall.noblox.nio;
 
-import com.cowboysmall.noblox.AbstractDispatcher;
+import com.cowboysmall.noblox.AbstractReactor;
 import com.cowboysmall.noblox.Acceptor;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.state.StateHandler;
+import com.cowboysmall.noblox.ReactorException;
+import com.cowboysmall.noblox.handler.Handler;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
@@ -12,16 +13,24 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Set;
 
-public class NIODispatcher extends AbstractDispatcher {
+
+public class NIOReactor extends AbstractReactor {
 
     private final Selector selector;
 
 
     //_________________________________________________________________________
 
-    public NIODispatcher() throws IOException {
+    public NIOReactor() {
 
-        selector = Selector.open();
+        try {
+
+            selector = Selector.open();
+
+        } catch (Exception e) {
+
+            throw new ReactorException(e);
+        }
     }
 
 
@@ -37,19 +46,19 @@ public class NIODispatcher extends AbstractDispatcher {
     //_________________________________________________________________________
 
     @Override
-    public Handle registerAcceptInterest(Acceptor channel) throws IOException {
+    public Handle registerAcceptInterest(Acceptor channel) {
 
         return new NIOHandle(registerInterest((SelectableChannel) channel.getAcceptor(), SelectionKey.OP_ACCEPT));
     }
 
     @Override
-    public Handle registerReadInterest(Channel channel) throws IOException {
+    public Handle registerReadInterest(Channel channel) {
 
         return new NIOHandle(registerInterest((SelectableChannel) channel.getChannel(), SelectionKey.OP_READ));
     }
 
     @Override
-    public Handle registerWriteInterest(Channel channel) throws IOException {
+    public Handle registerWriteInterest(Channel channel) {
 
         return new NIOHandle(registerInterest((SelectableChannel) channel.getChannel(), SelectionKey.OP_WRITE));
     }
@@ -57,19 +66,33 @@ public class NIODispatcher extends AbstractDispatcher {
 
     //_________________________________________________________________________
 
-    private SelectionKey registerInterest(SelectableChannel selectableChannel, int ops) throws IOException {
+    private SelectionKey registerInterest(SelectableChannel selectableChannel, int ops) {
 
-        selectableChannel.configureBlocking(false);
-        return selectableChannel.register(selector, ops);
+        try {
+
+            selectableChannel.configureBlocking(false);
+            return selectableChannel.register(selector, ops);
+
+        } catch (Exception e) {
+
+            throw new ReactorException(e);
+        }
     }
 
 
     //_________________________________________________________________________
 
     @Override
-    protected void waitForSelected() throws IOException {
+    protected void waitForSelected() {
 
-        selector.select();
+        try {
+
+            selector.select();
+
+        } catch (IOException e) {
+
+            throw new ReactorException(e);
+        }
     }
 
     @Override
@@ -79,8 +102,8 @@ public class NIODispatcher extends AbstractDispatcher {
 
         selectionKeys.stream()
                 .filter(SelectionKey::isValid)
-                .map(selectionKey -> (StateHandler) selectionKey.attachment())
-                .forEach(StateHandler::handleState);
+                .map(selectionKey -> (Handler) selectionKey.attachment())
+                .forEach(Handler::handle);
 
         selectionKeys.clear();
     }
