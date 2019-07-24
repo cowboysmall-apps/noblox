@@ -11,7 +11,7 @@ import java.nio.channels.ServerSocketChannel;
 
 public class NIOAcceptor implements Acceptor {
 
-    private ServerSocketChannel serverSocketChannel;
+    private final ServerSocketChannel serverSocketChannel;
 
 
     //_________________________________________________________________________

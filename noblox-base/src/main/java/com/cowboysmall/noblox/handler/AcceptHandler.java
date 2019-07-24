@@ -1,11 +1,6 @@
 package com.cowboysmall.noblox.handler;
 
-import com.cowboysmall.noblox.Acceptor;
-import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.Reactor;
-import com.cowboysmall.noblox.RequestContext;
-import com.cowboysmall.noblox.ServerContext;
+import com.cowboysmall.noblox.*;
 
 
 public class AcceptHandler implements Handler {
@@ -38,16 +33,7 @@ public class AcceptHandler implements Handler {
                 reactor.wakeup();
 
                 Handle handle = reactor.registerReadInterest(channel);
-                handle.setAttachment(
-                        new ReadHandler(
-                                handle,
-                                serverContext,
-                                new RequestContext(
-                                        serverContext.getBuffer(),
-                                        serverContext.getBuffer()
-                                )
-                        )
-                );
+                handle.setAttachment(new ReadHandler(handle, serverContext, new RequestContext()));
 
             } finally {
 

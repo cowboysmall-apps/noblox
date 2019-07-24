@@ -1,21 +1,13 @@
 package com.cowboysmall.noblox;
 
+import com.cowboysmall.noblox.buffer.BasicBuffer;
 import com.cowboysmall.noblox.buffer.Buffer;
 
 
 public class RequestContext {
 
-    private Buffer input;
-    private Buffer output;
-
-
-    //_________________________________________________________________________
-
-    public RequestContext(Buffer input, Buffer output) {
-
-        this.input = input;
-        this.output = output;
-    }
+    private final Buffer input = new BasicBuffer();
+    private final Buffer output = new BasicBuffer();
 
 
     //_________________________________________________________________________

@@ -1,6 +1,5 @@
 package com.cowboysmall.noblox.nio;
 
-import com.cowboysmall.noblox.Acceptor;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.HandleException;
@@ -13,17 +12,15 @@ public class NIOHandle implements Handle {
 
     private SelectionKey selectionKey;
 
-    private Acceptor acceptor;
     private Channel channel;
     private Reactor reactor;
 
 
     //_________________________________________________________________________
 
-    public NIOHandle(SelectionKey selectionKey, Acceptor acceptor, Reactor reactor) {
+    public NIOHandle(SelectionKey selectionKey, Reactor reactor) {
 
         this.selectionKey = selectionKey;
-        this.acceptor = acceptor;
         this.reactor = reactor;
     }
 
@@ -47,12 +44,6 @@ public class NIOHandle implements Handle {
     public Reactor getReactor() {
 
         return reactor;
-    }
-
-    @Override
-    public Acceptor getAcceptor() {
-
-        return acceptor;
     }
 
     @Override

@@ -1,14 +1,10 @@
 package com.cowboysmall.noblox;
 
-import com.cowboysmall.noblox.io.Reader;
-import com.cowboysmall.noblox.io.Writer;
-
-
 public interface Channel {
 
-    byte[] read(Reader reader);
+    byte[] read();
 
-    void write(byte[] bytes, Writer writer);
+    void write(byte[] bytes);
 
     Object getChannel();
 }

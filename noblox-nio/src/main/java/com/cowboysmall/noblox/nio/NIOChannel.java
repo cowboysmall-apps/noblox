@@ -2,9 +2,8 @@ package com.cowboysmall.noblox.nio;
 
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.ChannelException;
-import com.cowboysmall.noblox.io.Reader;
-import com.cowboysmall.noblox.io.Writer;
 
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 
@@ -24,11 +23,17 @@ public class NIOChannel implements Channel {
     //_________________________________________________________________________
 
     @Override
-    public byte[] read(Reader reader) {
+    public byte[] read() {
 
         try {
 
-            return reader.readFrom(this);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+            socketChannel.read(byteBuffer);
+            byteBuffer.flip();
+
+            byte[] bytes = new byte[byteBuffer.remaining()];
+            byteBuffer.get(bytes);
+            return bytes;
 
         } catch (Exception e) {
 
@@ -37,11 +42,11 @@ public class NIOChannel implements Channel {
     }
 
     @Override
-    public void write(byte[] bytes, Writer writer) {
+    public void write(byte[] bytes) {
 
         try {
 
-            writer.writeTo(bytes, this);
+            socketChannel.write(ByteBuffer.wrap(bytes));
 
         } catch (Exception e) {
 

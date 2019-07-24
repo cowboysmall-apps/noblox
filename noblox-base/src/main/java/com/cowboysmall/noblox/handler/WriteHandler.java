@@ -4,22 +4,19 @@ import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.Reactor;
 import com.cowboysmall.noblox.RequestContext;
-import com.cowboysmall.noblox.ServerContext;
 
 
 public class WriteHandler implements Handler {
 
     private Handle handle;
-    private ServerContext serverContext;
     private RequestContext requestContext;
 
 
     //_________________________________________________________________________
 
-    public WriteHandler(Handle handle, ServerContext serverContext, RequestContext requestContext) {
+    public WriteHandler(Handle handle, RequestContext requestContext) {
 
         this.handle = handle;
-        this.serverContext = serverContext;
         this.requestContext = requestContext;
     }
 
@@ -35,12 +32,7 @@ public class WriteHandler implements Handler {
             Reactor reactor = handle.getReactor();
 
             handle.setNoInterest();
-
-            channel.write(
-                    requestContext.getOutput().getBytes(),
-                    serverContext.getWriter()
-            );
-
+            channel.write(requestContext.getOutput().getBytes());
             reactor.unregisterInterest(handle);
 
         } catch (Exception e) {
