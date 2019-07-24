@@ -1,12 +1,14 @@
 package com.cowboysmall.noblox.handler;
 
+import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
+import com.cowboysmall.noblox.Reactor;
 import com.cowboysmall.noblox.RequestContext;
 import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.WriteUpdate;
 
 
-public class ReadHandler implements Handler, Runnable {
+public class ReadHandler implements Handler {
 
     private Handle handle;
     private ServerContext serverContext;
@@ -30,43 +32,25 @@ public class ReadHandler implements Handler, Runnable {
 
         try {
 
-            handle.setNoInterest();
+            Channel channel = handle.getChannel();
+            Reactor reactor = handle.getReactor();
 
-            requestContext.getInput().append(
-                    handle.getChannel().read(
-                            serverContext.getReader()
+            handle.setNoInterest();
+            requestContext.getInput().append(channel.read(serverContext.getReader()));
+            serverContext.getRequestHandler().handleRequest(requestContext);
+
+            reactor.addReactorUpdate(
+                    new WriteUpdate(
+                            handle,
+                            new WriteHandler(handle, serverContext, requestContext)
                     )
             );
 
-//            requestContext.getInput().append(
-//                    serverContext.getReader().readFrom(
-//                            handle.getChannel()
-//                    )
-//            );
-
-            serverContext.getExecutor().execute(this);
+            reactor.wakeup();
 
         } catch (Exception e) {
 
-            throw new RuntimeException(e);
+            throw new HandlerException(e);
         }
-    }
-
-
-    //_________________________________________________________________________
-
-    @Override
-    public void run() {
-
-        serverContext.getRequestHandler().handleRequest(requestContext);
-
-        serverContext.getReactor().addReactorUpdate(
-                new WriteUpdate(
-                        handle,
-                        new WriteHandler(handle, serverContext, requestContext)
-                )
-        );
-
-        serverContext.getReactor().wakeup();
     }
 }

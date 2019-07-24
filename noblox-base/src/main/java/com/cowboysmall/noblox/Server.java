@@ -1,28 +1,9 @@
 package com.cowboysmall.noblox;
 
 
-public class Server implements Runnable {
+public class Server {
 
     private ServerContext serverContext;
-
-    private boolean running = false;
-
-
-    //_________________________________________________________________________
-
-    @Override
-    public void run() {
-
-        try {
-
-            while (running)
-                serverContext.getReactor().dispatch();
-
-        } catch (Exception e) {
-
-            throw new RuntimeException(e);
-        }
-    }
 
 
     //_________________________________________________________________________
@@ -46,14 +27,21 @@ public class Server implements Runnable {
 
     public Server start() {
 
-        running = true;
-        serverContext.getExecutor().execute(this);
+        serverContext.getExecutor().execute(serverContext.getMasterReactor().start());
+
+        for (Reactor slaveReactor : serverContext.getSlaveReactors())
+            serverContext.getExecutor().execute(slaveReactor.start());
+
         return this;
     }
 
     public Server stop() {
 
-        running = false;
+        serverContext.getMasterReactor().stop();
+
+        for (Reactor slaveReactor : serverContext.getSlaveReactors())
+            slaveReactor.stop();
+
         return this;
     }
 }

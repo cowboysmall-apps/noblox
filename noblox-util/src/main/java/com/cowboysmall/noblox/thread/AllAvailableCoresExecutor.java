@@ -8,6 +8,6 @@ public class AllAvailableCoresExecutor extends AbstractExecutor {
 
     public AllAvailableCoresExecutor() {
 
-        super(newFixedThreadPool(getRuntime().availableProcessors()));
+        super(newFixedThreadPool(getRuntime().availableProcessors() * 2));
     }
 }

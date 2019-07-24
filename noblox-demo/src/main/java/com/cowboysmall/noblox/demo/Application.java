@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox.demo;
 
+import com.cowboysmall.noblox.ReactorFactory;
 import com.cowboysmall.noblox.ServerBuilder;
 import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.buffer.BasicBuffer;
@@ -19,7 +20,7 @@ public class Application {
                 .withServerContext(
                         new ServerContext()
                                 .withAcceptor(new NIOAcceptor("localhost", 8080))
-                                .withDispatcher(new NIOReactor())
+                                .withReactorFactory(new ReactorFactory(NIOReactor.class))
                                 .withReader(new DirectNIOReader())
                                 .withWriter(new BasicNIOWriter())
                                 .withBufferClass(BasicBuffer.class)

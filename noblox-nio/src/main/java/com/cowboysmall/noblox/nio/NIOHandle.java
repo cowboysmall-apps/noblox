@@ -1,23 +1,37 @@
 package com.cowboysmall.noblox.nio;
 
+import com.cowboysmall.noblox.Acceptor;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.HandleException;
+import com.cowboysmall.noblox.Reactor;
 
 import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
 
 
 public class NIOHandle implements Handle {
 
     private SelectionKey selectionKey;
 
+    private Acceptor acceptor;
+    private Channel channel;
+    private Reactor reactor;
+
 
     //_________________________________________________________________________
 
-    public NIOHandle(SelectionKey selectionKey) {
+    public NIOHandle(SelectionKey selectionKey, Acceptor acceptor, Reactor reactor) {
 
         this.selectionKey = selectionKey;
+        this.acceptor = acceptor;
+        this.reactor = reactor;
+    }
+
+    public NIOHandle(SelectionKey selectionKey, Channel channel, Reactor reactor) {
+
+        this.selectionKey = selectionKey;
+        this.channel = channel;
+        this.reactor = reactor;
     }
 
 
@@ -30,9 +44,21 @@ public class NIOHandle implements Handle {
     }
 
     @Override
+    public Reactor getReactor() {
+
+        return reactor;
+    }
+
+    @Override
+    public Acceptor getAcceptor() {
+
+        return acceptor;
+    }
+
+    @Override
     public Channel getChannel() {
 
-        return new NIOChannel((SocketChannel) selectionKey.channel());
+        return channel;
     }
 
     @Override

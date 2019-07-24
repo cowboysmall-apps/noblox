@@ -1,7 +1,7 @@
 package com.cowboysmall.noblox;
 
 
-public interface Reactor {
+public interface Reactor extends Runnable {
 
     void dispatch();
 
@@ -13,5 +13,19 @@ public interface Reactor {
 
     Handle registerWriteInterest(Channel channel);
 
+    void unregisterInterest(Handle handle);
+
     void addReactorUpdate(ReactorUpdate reactorUpdate);
+
+    boolean isRunning();
+
+    Reactor start();
+
+    Reactor stop();
+
+    void lock();
+
+    void unlock();
+
+    void checkLock();
 }

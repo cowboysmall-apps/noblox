@@ -4,6 +4,10 @@ public interface Handle {
 
     Object getHandle();
 
+    Reactor getReactor();
+
+    Acceptor getAcceptor();
+
     Channel getChannel();
 
     void setAttachment(Object object);
