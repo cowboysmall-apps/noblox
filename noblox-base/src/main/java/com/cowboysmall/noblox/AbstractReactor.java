@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractReactor implements Reactor {
 
-    private final List<ReactorUpdate> reactorUpdates = new ArrayList<ReactorUpdate>();
+    private final List<ReactorUpdate> reactorUpdates = new LinkedList<>();
 
     private final Lock lock = new ReentrantLock();
 
