@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox;
 
+
 public interface Channel {
 
     byte[] read();

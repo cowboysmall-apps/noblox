@@ -75,8 +75,8 @@ public class ServerContext {
 
     public Reactor getNextReactor() {
 
-        if (slaveReactors.isEmpty())
-            return masterReactor;
+//        if (slaveReactors.isEmpty())
+//            return masterReactor;
 
         Reactor next = slaveReactors.remove();
         slaveReactors.add(next);
