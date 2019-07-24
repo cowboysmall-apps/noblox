@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import static java.lang.Runtime.getRuntime;
 
+
 public class ReactorFactory {
 
     private Class<? extends Reactor> reactorClass;
@@ -22,7 +23,7 @@ public class ReactorFactory {
 
     public ReactorFactory(Class<? extends Reactor> reactorClass) {
 
-        this(reactorClass, (getRuntime().availableProcessors() * 2) - 1);
+        this(reactorClass, getRuntime().availableProcessors() - 1);
     }
 
     //_________________________________________________________________________
