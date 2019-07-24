@@ -37,6 +37,7 @@ public class ReadHandler implements Handler {
 
             handle.setNoInterest();
             requestContext.getInput().append(channel.read(serverContext.getReader()));
+
             serverContext.getRequestHandler().handleRequest(requestContext);
 
             reactor.addReactorUpdate(
