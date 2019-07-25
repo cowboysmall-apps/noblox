@@ -9,13 +9,16 @@ public interface Handle {
 
     Channel getChannel();
 
+
     void setAttachment(Object object);
+
 
     void setNoInterest();
 
     void setReadInterest();
 
     void setWriteInterest();
+
 
     void cancel();
 }

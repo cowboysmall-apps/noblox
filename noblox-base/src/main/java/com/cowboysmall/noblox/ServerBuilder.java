@@ -22,11 +22,9 @@ public class ServerBuilder {
     public Server build() {
 
         Acceptor acceptor = serverContext.getAcceptor();
-        Reactor reactor = serverContext.getMasterReactor();
+        serverContext.getMasterReactor().invokeLater(reactor -> {
 
-        reactor.invokeLater(r -> {
-
-            Handle handle = r.registerAcceptor(acceptor);
+            Handle handle = reactor.registerAcceptor(acceptor);
             handle.setAttachment(new AcceptHandler(serverContext));
         });
 
