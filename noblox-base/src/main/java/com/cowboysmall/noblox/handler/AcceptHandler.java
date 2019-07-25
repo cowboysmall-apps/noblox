@@ -1,9 +1,7 @@
 package com.cowboysmall.noblox.handler;
 
-import com.cowboysmall.noblox.Acceptor;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.Reactor;
 import com.cowboysmall.noblox.RequestContext;
 import com.cowboysmall.noblox.ServerContext;
 
@@ -28,22 +26,12 @@ public class AcceptHandler implements Handler {
 
         try {
 
-            Acceptor acceptor = serverContext.getAcceptor();
-            Channel channel = acceptor.accept();
-            Reactor reactor = serverContext.getNextReactor();
+            Channel channel = serverContext.getAcceptor().accept();
+            serverContext.getNextReactor().invokeNow(reactor -> {
 
-            reactor.lock();
-            try {
-
-                reactor.wakeup();
-
-                Handle handle = reactor.registerReadInterest(channel);
+                Handle handle = reactor.registerChannel(channel);
                 handle.setAttachment(new ReadHandler(serverContext, new RequestContext(), handle));
-
-            } finally {
-
-                reactor.unlock();
-            }
+            });
 
         } catch (Exception e) {
 

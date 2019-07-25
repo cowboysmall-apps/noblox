@@ -9,9 +9,11 @@ import java.nio.channels.SocketChannel;
 
 public class NIOChannel implements Channel {
 
-    private SocketChannel socketChannel;
+    private final ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 
-    private int bytesRead;
+    private final SocketChannel socketChannel;
+
+    private boolean bufferFull = false;
 
 
     //_________________________________________________________________________
@@ -29,12 +31,15 @@ public class NIOChannel implements Channel {
 
         try {
 
-            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-            bytesRead = socketChannel.read(byteBuffer);
-            byteBuffer.flip();
+            socketChannel.read(byteBuffer);
+            bufferFull = byteBuffer.remaining() == 0;
 
-            byte[] bytes = new byte[byteBuffer.remaining()];
+            byte[] bytes = new byte[byteBuffer.position()];
+
+            byteBuffer.flip();
             byteBuffer.get(bytes);
+            byteBuffer.clear();
+
             return bytes;
 
         } catch (Exception e) {
@@ -43,10 +48,9 @@ public class NIOChannel implements Channel {
         }
     }
 
-    @Override
-    public int bytesRead() {
+    public boolean bufferFull() {
 
-        return bytesRead;
+        return bufferFull;
     }
 
     @Override

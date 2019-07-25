@@ -26,8 +26,8 @@ public class BasicBuffer implements Buffer {
         int current = 0;
         for (byte[] b : buffer) {
 
-            arraycopy(b, 0, bytes, current, bytes.length);
-            current += bytes.length;
+            arraycopy(b, 0, bytes, current, b.length);
+            current += b.length;
         }
 
         return bytes;

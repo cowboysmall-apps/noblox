@@ -5,7 +5,7 @@ public interface Channel {
 
     byte[] read();
 
-    int bytesRead();
+    boolean bufferFull();
 
     void write(byte[] bytes);
 

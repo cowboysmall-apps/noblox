@@ -46,7 +46,7 @@ public class NIOReactor extends AbstractReactor {
     //_________________________________________________________________________
 
     @Override
-    public Handle registerAcceptInterest(Acceptor acceptor) {
+    public Handle registerAcceptor(Acceptor acceptor) {
 
         SelectableChannel selectableChannel = (SelectableChannel) acceptor.getAcceptor();
 
@@ -55,20 +55,11 @@ public class NIOReactor extends AbstractReactor {
     }
 
     @Override
-    public Handle registerReadInterest(Channel channel) {
+    public Handle registerChannel(Channel channel) {
 
         SelectableChannel selectableChannel = (SelectableChannel) channel.getChannel();
 
         SelectionKey selectionKey = registerInterest(selectableChannel, SelectionKey.OP_READ);
-        return new NIOHandle(selectionKey, channel, this);
-    }
-
-    @Override
-    public Handle registerWriteInterest(Channel channel) {
-
-        SelectableChannel selectableChannel = (SelectableChannel) channel.getChannel();
-
-        SelectionKey selectionKey = registerInterest(selectableChannel, SelectionKey.OP_WRITE);
         return new NIOHandle(selectionKey, channel, this);
     }
 

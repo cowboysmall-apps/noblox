@@ -15,9 +15,6 @@ public class NIOHandle implements Handle {
     private Channel channel;
     private Reactor reactor;
 
-//    private int interest;
-//    private int ready;
-
 
     //_________________________________________________________________________
 
@@ -26,9 +23,6 @@ public class NIOHandle implements Handle {
         this.selectionKey = selectionKey;
         this.channel = channel;
         this.reactor = reactor;
-
-//        this.interest = selectionKey.interestOps();
-//        this.ready = selectionKey.readyOps();
     }
 
     public NIOHandle(SelectionKey selectionKey, Reactor reactor) {

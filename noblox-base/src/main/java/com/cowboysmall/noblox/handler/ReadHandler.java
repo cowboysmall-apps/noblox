@@ -2,10 +2,8 @@ package com.cowboysmall.noblox.handler;
 
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.Reactor;
 import com.cowboysmall.noblox.RequestContext;
 import com.cowboysmall.noblox.ServerContext;
-import com.cowboysmall.noblox.WriteUpdate;
 
 
 public class ReadHandler implements Handler {
@@ -33,14 +31,22 @@ public class ReadHandler implements Handler {
         try {
 
             Channel channel = handle.getChannel();
-            Reactor reactor = handle.getReactor();
-
             handle.setNoInterest();
             requestContext.getInput().append(channel.read());
-            serverContext.getRequestHandler().handleRequest(requestContext);
 
-            reactor.addReactorUpdate(new WriteUpdate(handle, new WriteHandler(requestContext, handle)));
-            reactor.wakeup();
+            if (channel.bufferFull()) {
+
+                handle.setReadInterest();
+
+            } else {
+
+                serverContext.getRequestHandler().handleRequest(requestContext);
+                handle.getReactor().invokeLater(reactor -> {
+
+                    handle.setAttachment(new WriteHandler(requestContext, handle));
+                    handle.setWriteInterest();
+                });
+            }
 
         } catch (Exception e) {
 

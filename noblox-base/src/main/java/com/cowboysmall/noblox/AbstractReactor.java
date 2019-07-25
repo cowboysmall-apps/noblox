@@ -8,34 +8,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractReactor implements Reactor {
 
-    private final List<ReactorUpdate> reactorUpdates = new LinkedList<>();
+    private final List<Invocation> invocations = new LinkedList<>();
 
     private final Lock lock = new ReentrantLock();
 
     private boolean running = false;
-
-
-    //_________________________________________________________________________
-
-    @Override
-    public boolean isRunning() {
-
-        return running;
-    }
-
-    @Override
-    public Reactor start() {
-
-        running = true;
-        return this;
-    }
-
-    @Override
-    public Reactor stop() {
-
-        running = false;
-        return this;
-    }
 
 
     //_________________________________________________________________________
@@ -71,12 +48,13 @@ public abstract class AbstractReactor implements Reactor {
     //_________________________________________________________________________
 
     @Override
-    public void addReactorUpdate(ReactorUpdate reactorUpdate) {
+    public void invokeNow(Invocation invocation) {
 
         lock();
         try {
 
-            reactorUpdates.add(reactorUpdate);
+            wakeup();
+            invocation.invoke(this);
 
         } finally {
 
@@ -84,36 +62,42 @@ public abstract class AbstractReactor implements Reactor {
         }
     }
 
+    @Override
+    public void invokeLater(Invocation invocation) {
+
+        invocations.add(invocation);
+    }
+
+
+    //_________________________________________________________________________
+
     private void executeReactorUpdates() {
 
-        lock();
-        try {
-
-            reactorUpdates.forEach(ReactorUpdate::apply);
-            reactorUpdates.clear();
-
-        } finally {
-
-            unlock();
-        }
+        invocations.forEach(invocation -> invocation.invoke(this));
+        invocations.clear();
     }
 
 
     //_________________________________________________________________________
 
     @Override
-    public void unregisterInterest(Handle handle) {
+    public boolean isRunning() {
 
-        lock();
-        try {
+        return running;
+    }
 
-            wakeup();
-            handle.cancel();
+    @Override
+    public Reactor start() {
 
-        } finally {
+        running = true;
+        return this;
+    }
 
-            unlock();
-        }
+    @Override
+    public Reactor stop() {
+
+        running = false;
+        return this;
     }
 
 

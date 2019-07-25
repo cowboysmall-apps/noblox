@@ -7,21 +7,23 @@ public interface Reactor extends Runnable {
 
     void wakeup();
 
-    Handle registerAcceptInterest(Acceptor acceptor);
 
-    Handle registerReadInterest(Channel channel);
+    Handle registerAcceptor(Acceptor acceptor);
 
-    Handle registerWriteInterest(Channel channel);
+    Handle registerChannel(Channel channel);
 
-    void unregisterInterest(Handle handle);
 
-    void addReactorUpdate(ReactorUpdate reactorUpdate);
+    void invokeNow(Invocation invocation);
+
+    void invokeLater(Invocation invocation);
+
 
     boolean isRunning();
 
     Reactor start();
 
     Reactor stop();
+
 
     void lock();
 
