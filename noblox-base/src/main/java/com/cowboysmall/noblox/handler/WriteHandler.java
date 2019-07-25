@@ -28,9 +28,7 @@ public class WriteHandler implements Handler {
         try {
 
             Channel channel = handle.getChannel();
-
             handle.setNoInterest();
-
             channel.write(requestContext.getOutput().getBytes());
             handle.cancel();
 

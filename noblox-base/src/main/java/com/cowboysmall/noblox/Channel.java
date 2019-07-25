@@ -3,11 +3,11 @@ package com.cowboysmall.noblox;
 
 public interface Channel {
 
-    byte[] read();
+    Object getChannel();
 
-    boolean bufferFull();
+    byte[] read();
 
     void write(byte[] bytes);
 
-    Object getChannel();
+    boolean bufferFull();
 }
