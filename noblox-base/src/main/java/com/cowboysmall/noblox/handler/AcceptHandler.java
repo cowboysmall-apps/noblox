@@ -38,7 +38,7 @@ public class AcceptHandler implements Handler {
                 reactor.wakeup();
 
                 Handle handle = reactor.registerReadInterest(channel);
-                handle.setAttachment(new ReadHandler(handle, serverContext, new RequestContext()));
+                handle.setAttachment(new ReadHandler(serverContext, new RequestContext(), handle));
 
             } finally {
 

@@ -10,18 +10,18 @@ import com.cowboysmall.noblox.WriteUpdate;
 
 public class ReadHandler implements Handler {
 
-    private Handle handle;
     private ServerContext serverContext;
     private RequestContext requestContext;
+    private Handle handle;
 
 
     //_________________________________________________________________________
 
-    public ReadHandler(Handle handle, ServerContext serverContext, RequestContext requestContext) {
+    public ReadHandler(ServerContext serverContext, RequestContext requestContext, Handle handle) {
 
-        this.handle = handle;
         this.serverContext = serverContext;
         this.requestContext = requestContext;
+        this.handle = handle;
     }
 
 
@@ -39,8 +39,7 @@ public class ReadHandler implements Handler {
             requestContext.getInput().append(channel.read());
             serverContext.getRequestHandler().handleRequest(requestContext);
 
-            reactor.addReactorUpdate(new WriteUpdate(handle, new WriteHandler(handle, requestContext)));
-
+            reactor.addReactorUpdate(new WriteUpdate(handle, new WriteHandler(requestContext, handle)));
             reactor.wakeup();
 
         } catch (Exception e) {

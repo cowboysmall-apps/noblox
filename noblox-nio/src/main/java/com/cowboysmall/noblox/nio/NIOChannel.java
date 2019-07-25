@@ -11,6 +11,8 @@ public class NIOChannel implements Channel {
 
     private SocketChannel socketChannel;
 
+    private int bytesRead;
+
 
     //_________________________________________________________________________
 
@@ -28,7 +30,7 @@ public class NIOChannel implements Channel {
         try {
 
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-            socketChannel.read(byteBuffer);
+            bytesRead = socketChannel.read(byteBuffer);
             byteBuffer.flip();
 
             byte[] bytes = new byte[byteBuffer.remaining()];
@@ -39,6 +41,12 @@ public class NIOChannel implements Channel {
 
             throw new ChannelException(e);
         }
+    }
+
+    @Override
+    public int bytesRead() {
+
+        return bytesRead;
     }
 
     @Override

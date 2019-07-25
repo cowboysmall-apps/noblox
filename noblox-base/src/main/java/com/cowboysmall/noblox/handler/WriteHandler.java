@@ -8,16 +8,16 @@ import com.cowboysmall.noblox.RequestContext;
 
 public class WriteHandler implements Handler {
 
-    private Handle handle;
     private RequestContext requestContext;
+    private Handle handle;
 
 
     //_________________________________________________________________________
 
-    public WriteHandler(Handle handle, RequestContext requestContext) {
+    public WriteHandler(RequestContext requestContext, Handle handle) {
 
-        this.handle = handle;
         this.requestContext = requestContext;
+        this.handle = handle;
     }
 
 
@@ -33,11 +33,12 @@ public class WriteHandler implements Handler {
 
             handle.setNoInterest();
             channel.write(requestContext.getOutput().getBytes());
+
             reactor.unregisterInterest(handle);
 
         } catch (Exception e) {
 
-            throw new RuntimeException(e);
+            throw new HandlerException(e);
         }
     }
 }

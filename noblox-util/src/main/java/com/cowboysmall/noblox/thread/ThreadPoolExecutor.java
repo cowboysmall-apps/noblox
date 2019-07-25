@@ -4,10 +4,15 @@ import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 
-public class AllAvailableCoresExecutor extends AbstractExecutor {
+public class ThreadPoolExecutor extends AbstractExecutor {
 
-    public AllAvailableCoresExecutor() {
+    public ThreadPoolExecutor() {
 
         super(newFixedThreadPool(getRuntime().availableProcessors()));
+    }
+
+    public ThreadPoolExecutor(int threadCount) {
+
+        super(newFixedThreadPool(threadCount));
     }
 }
