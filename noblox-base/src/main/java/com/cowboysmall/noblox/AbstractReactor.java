@@ -12,7 +12,7 @@ public abstract class AbstractReactor implements Reactor {
 
     private final Lock lock = new ReentrantLock();
 
-    private boolean running = false;
+    private boolean running;
 
 
     //_________________________________________________________________________
@@ -37,7 +37,7 @@ public abstract class AbstractReactor implements Reactor {
     @Override
     public final void dispatch() {
 
-        executeReactorUpdates();
+        executeInvocations();
 
         checkLock();
         waitForSelected();
@@ -71,7 +71,7 @@ public abstract class AbstractReactor implements Reactor {
 
     //_________________________________________________________________________
 
-    private void executeReactorUpdates() {
+    private void executeInvocations() {
 
         invocations.forEach(invocation -> invocation.invoke(this));
         invocations.clear();
