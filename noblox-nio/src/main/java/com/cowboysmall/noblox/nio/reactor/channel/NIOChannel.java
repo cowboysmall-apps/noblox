@@ -1,7 +1,7 @@
-package com.cowboysmall.noblox.nio;
+package com.cowboysmall.noblox.nio.reactor.channel;
 
-import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.ChannelException;
+import com.cowboysmall.noblox.reactor.channel.Channel;
+import com.cowboysmall.noblox.reactor.channel.ChannelException;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;

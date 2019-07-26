@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.reactor.channel;
 
 
 public interface Channel {

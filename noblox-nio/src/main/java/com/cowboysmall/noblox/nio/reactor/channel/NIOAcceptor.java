@@ -1,8 +1,8 @@
-package com.cowboysmall.noblox.nio;
+package com.cowboysmall.noblox.nio.reactor.channel;
 
-import com.cowboysmall.noblox.Acceptor;
-import com.cowboysmall.noblox.AcceptorException;
-import com.cowboysmall.noblox.Channel;
+import com.cowboysmall.noblox.reactor.channel.Acceptor;
+import com.cowboysmall.noblox.reactor.channel.AcceptorException;
+import com.cowboysmall.noblox.reactor.channel.Channel;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

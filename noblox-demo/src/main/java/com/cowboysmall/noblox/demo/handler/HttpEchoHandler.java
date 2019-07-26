@@ -1,7 +1,7 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.RequestContext;
-import com.cowboysmall.noblox.RequestHandler;
+import com.cowboysmall.noblox.reactor.request.RequestContext;
+import com.cowboysmall.noblox.reactor.request.RequestHandler;
 import com.cowboysmall.noblox.header.HeaderBuilder;
 import com.cowboysmall.noblox.header.http.HttpHeaderBuilder;
 

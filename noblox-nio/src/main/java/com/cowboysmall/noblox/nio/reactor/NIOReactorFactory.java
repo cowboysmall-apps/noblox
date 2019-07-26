@@ -1,7 +1,7 @@
-package com.cowboysmall.noblox.nio;
+package com.cowboysmall.noblox.nio.reactor;
 
-import com.cowboysmall.noblox.Reactor;
-import com.cowboysmall.noblox.ReactorFactory;
+import com.cowboysmall.noblox.reactor.Reactor;
+import com.cowboysmall.noblox.reactor.ReactorFactory;
 
 import java.util.LinkedList;
 import java.util.Queue;

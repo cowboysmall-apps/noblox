@@ -1,7 +1,7 @@
 package com.cowboysmall.noblox.demo.handler;
 
-import com.cowboysmall.noblox.RequestContext;
-import com.cowboysmall.noblox.RequestHandler;
+import com.cowboysmall.noblox.reactor.request.RequestContext;
+import com.cowboysmall.noblox.reactor.request.RequestHandler;
 
 
 public class SimpleEchoHandler implements RequestHandler {

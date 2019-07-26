@@ -1,4 +1,8 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.reactor;
+
+import com.cowboysmall.noblox.reactor.channel.Acceptor;
+import com.cowboysmall.noblox.reactor.channel.Channel;
+import com.cowboysmall.noblox.reactor.channel.Handle;
 
 
 public interface Reactor extends Runnable {

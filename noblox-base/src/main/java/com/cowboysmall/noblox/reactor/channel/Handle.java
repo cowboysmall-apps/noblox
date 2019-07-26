@@ -1,5 +1,8 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.reactor.channel;
 
+
+import com.cowboysmall.noblox.reactor.Reactor;
+import com.cowboysmall.noblox.reactor.channel.Channel;
 
 public interface Handle {
 

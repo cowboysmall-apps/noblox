@@ -1,11 +1,12 @@
-package com.cowboysmall.noblox.nio;
+package com.cowboysmall.noblox.nio.reactor;
 
-import com.cowboysmall.noblox.AbstractReactor;
-import com.cowboysmall.noblox.Acceptor;
-import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.ReactorException;
-import com.cowboysmall.noblox.handler.Handler;
+import com.cowboysmall.noblox.nio.reactor.channel.NIOHandle;
+import com.cowboysmall.noblox.reactor.AbstractReactor;
+import com.cowboysmall.noblox.reactor.channel.Acceptor;
+import com.cowboysmall.noblox.reactor.channel.Channel;
+import com.cowboysmall.noblox.reactor.channel.Handle;
+import com.cowboysmall.noblox.reactor.ReactorException;
+import com.cowboysmall.noblox.reactor.handler.Handler;
 
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;

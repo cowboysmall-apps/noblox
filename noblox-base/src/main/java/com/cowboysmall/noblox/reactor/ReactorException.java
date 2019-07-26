@@ -1,4 +1,4 @@
-package com.cowboysmall.noblox;
+package com.cowboysmall.noblox.reactor;
 
 
 public class ReactorException extends RuntimeException {

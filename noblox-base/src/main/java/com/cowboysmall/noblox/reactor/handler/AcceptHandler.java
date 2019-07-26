@@ -1,9 +1,9 @@
-package com.cowboysmall.noblox.handler;
+package com.cowboysmall.noblox.reactor.handler;
 
 import com.codahale.metrics.Meter;
-import com.cowboysmall.noblox.Channel;
-import com.cowboysmall.noblox.Handle;
-import com.cowboysmall.noblox.RequestContext;
+import com.cowboysmall.noblox.reactor.channel.Channel;
+import com.cowboysmall.noblox.reactor.channel.Handle;
+import com.cowboysmall.noblox.reactor.request.RequestContext;
 import com.cowboysmall.noblox.ServerContext;
 
 
