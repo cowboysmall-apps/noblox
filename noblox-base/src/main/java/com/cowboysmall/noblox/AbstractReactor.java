@@ -12,6 +12,7 @@ public abstract class AbstractReactor implements Reactor {
 
     private final Lock lock = new ReentrantLock();
 
+    private int activeConnections;
     private boolean running;
 
 
@@ -40,8 +41,14 @@ public abstract class AbstractReactor implements Reactor {
         executeInvocations();
 
         checkLock();
-        waitForSelected();
+        activeConnections = waitForSelected();
         handleSelected();
+    }
+
+    @Override
+    public int activeConnections() {
+
+        return activeConnections;
     }
 
 
@@ -125,7 +132,7 @@ public abstract class AbstractReactor implements Reactor {
 
     //_________________________________________________________________________
 
-    protected abstract void waitForSelected();
+    protected abstract int waitForSelected();
 
     protected abstract void handleSelected();
 }

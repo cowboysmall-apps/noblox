@@ -7,6 +7,8 @@ public interface Reactor extends Runnable {
 
     void wakeup();
 
+    int activeConnections();
+
 
     Handle registerAcceptor(Acceptor acceptor);
 

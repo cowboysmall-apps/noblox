@@ -7,7 +7,6 @@ import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.ReactorException;
 import com.cowboysmall.noblox.handler.Handler;
 
-import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -20,6 +19,11 @@ public class NIOReactor extends AbstractReactor {
 
 
     //_________________________________________________________________________
+
+    public NIOReactor(Selector selector) {
+
+        this.selector = selector;
+    }
 
     public NIOReactor() {
 
@@ -83,13 +87,13 @@ public class NIOReactor extends AbstractReactor {
     //_________________________________________________________________________
 
     @Override
-    protected void waitForSelected() {
+    protected int waitForSelected() {
 
         try {
 
-            selector.select();
+            return selector.select();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 
             throw new ReactorException(e);
         }
