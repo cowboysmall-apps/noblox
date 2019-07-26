@@ -1,11 +1,14 @@
 package com.cowboysmall.noblox;
 
+import com.codahale.metrics.MetricRegistry;
 import com.cowboysmall.noblox.thread.Executor;
 
 import java.util.Queue;
 
 
 public class ServerContext {
+
+    private final MetricRegistry metricsRegistry = new MetricRegistry();
 
     private Acceptor acceptor;
     private RequestHandler requestHandler;
@@ -40,6 +43,11 @@ public class ServerContext {
     public Queue<Reactor> getSlaveReactors() {
 
         return slaveReactors;
+    }
+
+    public MetricRegistry getMetricsRegistry() {
+
+        return metricsRegistry;
     }
 
 

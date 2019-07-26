@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox.handler;
 
+import com.codahale.metrics.Meter;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.RequestContext;
@@ -12,6 +13,8 @@ public class ReadHandler implements Handler {
     private RequestContext requestContext;
     private Handle handle;
 
+    private Meter meter;
+
 
     //_________________________________________________________________________
 
@@ -20,6 +23,8 @@ public class ReadHandler implements Handler {
         this.serverContext = serverContext;
         this.requestContext = requestContext;
         this.handle = handle;
+
+        meter = serverContext.getMetricsRegistry().meter("ReadHandler");
     }
 
 
@@ -29,6 +34,8 @@ public class ReadHandler implements Handler {
     public void handle() {
 
         try {
+
+            meter.mark();
 
             Channel channel = handle.getChannel();
             handle.setNoInterest();
@@ -43,7 +50,7 @@ public class ReadHandler implements Handler {
                 serverContext.getRequestHandler().handleRequest(requestContext);
                 handle.getReactor().invokeLater(reactor -> {
 
-                    handle.setAttachment(new WriteHandler(requestContext, handle));
+                    handle.setAttachment(new WriteHandler(serverContext, requestContext, handle));
                     handle.setWriteInterest();
                 });
             }

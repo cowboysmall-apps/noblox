@@ -1,5 +1,6 @@
 package com.cowboysmall.noblox.handler;
 
+import com.codahale.metrics.Meter;
 import com.cowboysmall.noblox.Channel;
 import com.cowboysmall.noblox.Handle;
 import com.cowboysmall.noblox.RequestContext;
@@ -10,12 +11,16 @@ public class AcceptHandler implements Handler {
 
     private ServerContext serverContext;
 
+    private Meter meter;
+
 
     //_________________________________________________________________________
 
     public AcceptHandler(ServerContext serverContext) {
 
         this.serverContext = serverContext;
+
+        meter = serverContext.getMetricsRegistry().meter("AcceptHandler");
     }
 
 
@@ -25,6 +30,8 @@ public class AcceptHandler implements Handler {
     public void handle() {
 
         try {
+
+            meter.mark();
 
             Channel channel = serverContext.getAcceptor().accept();
             serverContext.getNextReactor().invokeNow(reactor -> {
