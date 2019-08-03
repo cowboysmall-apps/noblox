@@ -2,10 +2,10 @@ package com.cowboysmall.noblox.nio.reactor;
 
 import com.cowboysmall.noblox.nio.reactor.channel.NIOHandle;
 import com.cowboysmall.noblox.reactor.AbstractReactor;
+import com.cowboysmall.noblox.reactor.ReactorException;
 import com.cowboysmall.noblox.reactor.channel.Acceptor;
 import com.cowboysmall.noblox.reactor.channel.Channel;
 import com.cowboysmall.noblox.reactor.channel.Handle;
-import com.cowboysmall.noblox.reactor.ReactorException;
 import com.cowboysmall.noblox.reactor.handler.Handler;
 
 import java.nio.channels.SelectableChannel;
