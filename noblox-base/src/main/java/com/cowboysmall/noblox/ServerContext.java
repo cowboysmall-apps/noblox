@@ -75,7 +75,7 @@ public class ServerContext {
         return this;
     }
 
-    public ServerContext withReactorFactory(ReactorFactory reactorFactory) throws Exception {
+    public ServerContext withReactorFactory(ReactorFactory reactorFactory) {
 
         this.masterReactor = reactorFactory.createMasterReactor();
         this.slaveReactors = reactorFactory.createSlaveReactors();
