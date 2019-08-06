@@ -3,9 +3,9 @@ package com.cowboysmall.noblox.reactor.channel;
 import com.cowboysmall.noblox.reactor.Reactor;
 
 
-public interface Handle {
+public interface Handle<T> {
 
-    Object getHandle();
+    T getImplementation();
 
     Reactor getReactor();
 

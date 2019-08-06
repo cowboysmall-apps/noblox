@@ -1,10 +1,10 @@
 package com.cowboysmall.noblox.reactor.handler;
 
 import com.codahale.metrics.Meter;
+import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.reactor.channel.Channel;
 import com.cowboysmall.noblox.reactor.channel.Handle;
 import com.cowboysmall.noblox.reactor.request.RequestContext;
-import com.cowboysmall.noblox.ServerContext;
 
 
 public class AcceptHandler implements Handler {
@@ -36,7 +36,7 @@ public class AcceptHandler implements Handler {
             Channel channel = serverContext.getAcceptor().accept();
             serverContext.getNextReactor().invokeNow(reactor -> {
 
-                Handle handle = reactor.registerChannel(channel);
+                Handle handle = channel.registerWith(reactor);
                 handle.setAttachment(new ReadHandler(serverContext, new RequestContext(), handle));
             });
 

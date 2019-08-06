@@ -1,19 +1,19 @@
 package com.cowboysmall.noblox.nio.reactor.channel;
 
+import com.cowboysmall.noblox.reactor.Reactor;
 import com.cowboysmall.noblox.reactor.channel.Channel;
 import com.cowboysmall.noblox.reactor.channel.Handle;
 import com.cowboysmall.noblox.reactor.channel.HandleException;
-import com.cowboysmall.noblox.reactor.Reactor;
 
 import java.nio.channels.SelectionKey;
 
 
-public class NIOHandle implements Handle {
+public class NIOHandle implements Handle<SelectionKey> {
 
-    private SelectionKey selectionKey;
+    private final SelectionKey selectionKey;
 
-    private Channel channel;
-    private Reactor reactor;
+    private final Channel channel;
+    private final Reactor reactor;
 
 
     //_________________________________________________________________________
@@ -25,16 +25,11 @@ public class NIOHandle implements Handle {
         this.reactor = reactor;
     }
 
-    public NIOHandle(SelectionKey selectionKey, Reactor reactor) {
-
-        this(selectionKey, null, reactor);
-    }
-
 
     //_________________________________________________________________________
 
     @Override
-    public Object getHandle() {
+    public SelectionKey getImplementation() {
 
         return selectionKey;
     }

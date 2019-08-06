@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public abstract class AbstractReactor implements Reactor {
+public abstract class AbstractReactor<T> implements Reactor<T> {
 
     private final List<Invocation> invocations = new LinkedList<>();
 

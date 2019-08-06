@@ -26,7 +26,7 @@ public class ServerBuilder {
         Acceptor acceptor = serverContext.getAcceptor();
         serverContext.getMasterReactor().invokeLater(reactor -> {
 
-            Handle handle = reactor.registerAcceptor(acceptor);
+            Handle handle = acceptor.registerWith(reactor);
             handle.setAttachment(new AcceptHandler(serverContext));
         });
 

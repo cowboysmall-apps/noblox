@@ -1,22 +1,14 @@
 package com.cowboysmall.noblox.reactor;
 
-import com.cowboysmall.noblox.reactor.channel.Acceptor;
-import com.cowboysmall.noblox.reactor.channel.Channel;
-import com.cowboysmall.noblox.reactor.channel.Handle;
+public interface Reactor<T> extends Runnable {
 
-
-public interface Reactor extends Runnable {
+    T getImplementation();
 
     void dispatch();
 
     void wakeup();
 
     int activeConnections();
-
-
-    Handle registerAcceptor(Acceptor acceptor);
-
-    Handle registerChannel(Channel channel);
 
 
     void invokeNow(Invocation invocation);
