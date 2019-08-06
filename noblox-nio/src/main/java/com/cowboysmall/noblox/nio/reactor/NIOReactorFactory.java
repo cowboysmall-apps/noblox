@@ -4,6 +4,7 @@ import com.cowboysmall.noblox.reactor.Reactor;
 import com.cowboysmall.noblox.reactor.ReactorFactory;
 
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import static java.lang.Runtime.getRuntime;
@@ -35,7 +36,7 @@ public class NIOReactorFactory implements ReactorFactory {
 
     public Queue<Reactor> createSlaveReactors() {
 
-        Queue<Reactor> slaveReactors = new LinkedList<>();
+        Queue<Reactor> slaveReactors = new PriorityQueue<>();
 
         while (slaveReactors.size() < slaveCount)
             slaveReactors.add(new NIOReactor());

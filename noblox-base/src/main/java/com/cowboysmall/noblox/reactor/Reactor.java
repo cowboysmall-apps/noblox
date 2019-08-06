@@ -1,6 +1,6 @@
 package com.cowboysmall.noblox.reactor;
 
-public interface Reactor<T> extends Runnable {
+public interface Reactor<T> extends Runnable, Comparable<Reactor> {
 
     T getImplementation();
 
