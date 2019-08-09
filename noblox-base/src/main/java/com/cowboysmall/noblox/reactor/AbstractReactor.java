@@ -38,7 +38,6 @@ public abstract class AbstractReactor<T> implements Reactor<T> {
     @Override
     public int compareTo(Reactor reactor) {
 
-//        return reactor.activeConnections() - activeConnections;
         return activeConnections - reactor.activeConnections();
     }
 
