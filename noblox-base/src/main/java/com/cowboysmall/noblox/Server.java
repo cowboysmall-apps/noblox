@@ -10,7 +10,7 @@ public class Server {
 
     private ServerContext serverContext;
 
-    private ConsoleReporter consoleReporter;
+//    private ConsoleReporter consoleReporter;
 
 
     //_________________________________________________________________________
@@ -39,13 +39,13 @@ public class Server {
         for (Reactor slaveReactor : serverContext.getSlaveReactors())
             serverContext.getExecutor().execute(slaveReactor.start());
 
-        consoleReporter =
-                ConsoleReporter.forRegistry(serverContext.getMetricsRegistry())
-                        .convertRatesTo(TimeUnit.SECONDS)
-                        .convertDurationsTo(TimeUnit.MILLISECONDS)
-                        .build();
+//        consoleReporter =
+//                ConsoleReporter.forRegistry(serverContext.getMetricsRegistry())
+//                        .convertRatesTo(TimeUnit.SECONDS)
+//                        .convertDurationsTo(TimeUnit.MILLISECONDS)
+//                        .build();
 
-        consoleReporter.start(5, TimeUnit.SECONDS);
+//        consoleReporter.start(5, TimeUnit.SECONDS);
 
         return this;
     }
@@ -57,7 +57,7 @@ public class Server {
         for (Reactor slaveReactor : serverContext.getSlaveReactors())
             slaveReactor.stop();
 
-        consoleReporter.stop();
+//        consoleReporter.stop();
 
         return this;
     }

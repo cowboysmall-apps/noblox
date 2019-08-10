@@ -16,8 +16,8 @@ public class Application {
                 .withServerContext(
                         new ServerContext()
                                 .withAcceptor(new NIOAcceptor("localhost", 8080))
-                                .withReactorFactory(new NIOReactorFactory())
-                                .withExecutor(new ThreadPoolExecutor())
+                                .withReactorFactory(new NIOReactorFactory(7))
+                                .withExecutor(new ThreadPoolExecutor(8))
                                 .withRequestHandler(new HttpEchoHandler())
                 )
                 .build()

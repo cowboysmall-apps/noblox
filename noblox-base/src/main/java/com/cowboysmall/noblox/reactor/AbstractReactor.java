@@ -28,17 +28,8 @@ public abstract class AbstractReactor<T> implements Reactor<T> {
 
         } catch (Exception e) {
 
-            throw new ReactorException(e);
+            running = false;
         }
-    }
-
-
-    //_________________________________________________________________________
-
-    @Override
-    public int compareTo(Reactor reactor) {
-
-        return activeConnections - reactor.activeConnections();
     }
 
 

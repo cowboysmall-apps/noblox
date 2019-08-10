@@ -5,5 +5,7 @@ public interface Buffer {
 
     byte[] getBytes();
 
+    int getLength();
+
     void append(byte[] bytes);
 }

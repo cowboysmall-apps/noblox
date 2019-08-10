@@ -10,18 +10,15 @@ public class BasicBuffer implements Buffer {
 
     private List<byte[]> buffer = new LinkedList<>();
 
+    private int length;
+
 
     //_________________________________________________________________________
 
     @Override
     public byte[] getBytes() {
 
-        int total =
-                buffer.stream()
-                        .mapToInt(b -> b.length)
-                        .sum();
-
-        byte[] bytes = new byte[total];
+        byte[] bytes = new byte[length];
 
         int current = 0;
         for (byte[] b : buffer) {
@@ -34,8 +31,18 @@ public class BasicBuffer implements Buffer {
     }
 
     @Override
+    public int getLength() {
+
+        return length;
+    }
+
+    @Override
     public void append(byte[] bytes) {
 
-        this.buffer.add(bytes);
+        if (bytes == null)
+            throw new IllegalArgumentException("bytes cannot be null");
+
+        length += bytes.length;
+        buffer.add(bytes);
     }
 }

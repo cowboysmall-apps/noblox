@@ -77,8 +77,8 @@ public class ServerContext {
 
     public ServerContext withReactorFactory(ReactorFactory reactorFactory) {
 
-        this.masterReactor = reactorFactory.createMasterReactor();
-        this.slaveReactors = reactorFactory.createSlaveReactors();
+        masterReactor = reactorFactory.createMasterReactor();
+        slaveReactors = reactorFactory.createSlaveReactors();
         return this;
     }
 
@@ -88,7 +88,10 @@ public class ServerContext {
     public Reactor getNextReactor() {
 
         Reactor next = slaveReactors.remove();
+        if (!next.isRunning())
+            next.start();
         slaveReactors.add(next);
+
         return next;
     }
 }
