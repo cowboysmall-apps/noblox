@@ -24,7 +24,7 @@ public class NIOReactorFactory implements ReactorFactory {
 
     public NIOReactorFactory() {
 
-        this(getRuntime().availableProcessors());
+        this(getRuntime().availableProcessors() - 1);
     }
 
 
