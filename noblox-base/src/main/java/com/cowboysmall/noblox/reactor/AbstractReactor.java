@@ -21,15 +21,8 @@ public abstract class AbstractReactor<T> implements Reactor<T> {
     @Override
     public void run() {
 
-        try {
-
-            while (running)
-                dispatch();
-
-        } catch (Exception e) {
-
-            running = false;
-        }
+        while (running)
+            dispatch();
     }
 
 
@@ -38,11 +31,19 @@ public abstract class AbstractReactor<T> implements Reactor<T> {
     @Override
     public final void dispatch() {
 
-        executeInvocations();
+        try {
 
-        checkLock();
-        activeConnections = waitForSelected();
-        handleSelected();
+            executeInvocations();
+
+            checkLock();
+            activeConnections = waitForSelected();
+            handleSelected();
+
+        } catch (Exception e) {
+
+            // do some logging...
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

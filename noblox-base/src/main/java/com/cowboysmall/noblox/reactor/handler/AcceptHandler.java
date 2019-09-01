@@ -34,7 +34,7 @@ public class AcceptHandler implements Handler {
             meter.mark();
 
             Channel channel = serverContext.getAcceptor().accept();
-            serverContext.getNextReactor().invokeNow(reactor -> {
+            serverContext.getReactorManager().getNextSlave().invokeNow(reactor -> {
 
                 Handle handle = channel.registerWith(reactor);
                 handle.setAttachment(new ReadHandler(serverContext, new RequestContext(), handle));
