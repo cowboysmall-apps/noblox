@@ -42,7 +42,7 @@ public abstract class AbstractReactor<T> implements Reactor<T> {
         } catch (Exception e) {
 
             // do some logging...
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
         }
     }
 

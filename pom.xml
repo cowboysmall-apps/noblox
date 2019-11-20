@@ -13,7 +13,7 @@
 
     <name>noblox</name>
     <description>NoBlox</description>
-    <url>https://github.com/cowboysmall/noblox</url>
+    <url>https://github.com/cowboysmall-apps/noblox</url>
 
 
     <distributionManagement>
@@ -62,7 +62,6 @@
             <version>2.1</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 
