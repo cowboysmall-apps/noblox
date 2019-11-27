@@ -1,13 +1,10 @@
 package com.cowboysmall.noblox;
 
 import com.codahale.metrics.MetricRegistry;
-import com.cowboysmall.noblox.reactor.Reactor;
-import com.cowboysmall.noblox.reactor.ReactorFactory;
+import com.cowboysmall.noblox.reactor.ReactorManager;
 import com.cowboysmall.noblox.reactor.channel.Acceptor;
 import com.cowboysmall.noblox.reactor.request.RequestHandler;
 import com.cowboysmall.noblox.thread.Executor;
-
-import java.util.Queue;
 
 
 public class ServerContext {
@@ -18,8 +15,7 @@ public class ServerContext {
     private RequestHandler requestHandler;
     private Executor executor;
 
-    private Reactor masterReactor;
-    private Queue<Reactor> slaveReactors;
+    private ReactorManager reactorManager;
 
 
     //_________________________________________________________________________
@@ -39,19 +35,14 @@ public class ServerContext {
         return executor;
     }
 
-    public Reactor getMasterReactor() {
-
-        return masterReactor;
-    }
-
-    public Queue<Reactor> getSlaveReactors() {
-
-        return slaveReactors;
-    }
-
     public MetricRegistry getMetricsRegistry() {
 
         return metricsRegistry;
+    }
+
+    public ReactorManager getReactorManager() {
+
+        return reactorManager;
     }
 
 
@@ -75,23 +66,9 @@ public class ServerContext {
         return this;
     }
 
-    public ServerContext withReactorFactory(ReactorFactory reactorFactory) {
+    public ServerContext withReactorManager(ReactorManager reactorManager) {
 
-        masterReactor = reactorFactory.createMasterReactor();
-        slaveReactors = reactorFactory.createSlaveReactors();
+        this.reactorManager = reactorManager;
         return this;
-    }
-
-
-    //_________________________________________________________________________
-
-    public Reactor getNextReactor() {
-
-        Reactor next = slaveReactors.remove();
-        if (!next.isRunning())
-            next.start();
-        slaveReactors.add(next);
-
-        return next;
     }
 }
