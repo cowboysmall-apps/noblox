@@ -94,14 +94,14 @@ public abstract class AbstractReactor implements Reactor {
     }
 
     @Override
-    public Reactor start() {
+    public Reactor<T> start() {
 
         running = true;
         return this;
     }
 
     @Override
-    public Reactor stop() {
+    public Reactor<T> stop() {
 
         running = false;
         return this;
