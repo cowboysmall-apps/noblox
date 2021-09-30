@@ -8,18 +8,12 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Set;
 
-
-public class NIOReactor extends AbstractReactor<Selector> {
+public class NIOReactor extends AbstractReactor {
 
     private final Selector selector;
 
 
     //_________________________________________________________________________
-
-    public NIOReactor(Selector selector) {
-
-        this.selector = selector;
-    }
 
     public NIOReactor() {
 

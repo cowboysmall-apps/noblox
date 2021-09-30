@@ -3,7 +3,6 @@ package com.cowboysmall.noblox.reactor.request;
 import com.cowboysmall.noblox.buffer.BasicBuffer;
 import com.cowboysmall.noblox.buffer.Buffer;
 
-
 public class RequestContext {
 
     private final Buffer input = new BasicBuffer();

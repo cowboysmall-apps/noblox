@@ -6,12 +6,11 @@ import com.cowboysmall.noblox.reactor.channel.Channel;
 import com.cowboysmall.noblox.reactor.channel.Handle;
 import com.cowboysmall.noblox.reactor.request.RequestContext;
 
-
 public class AcceptHandler implements Handler {
 
-    private ServerContext serverContext;
+    private final ServerContext serverContext;
 
-    private Meter meter;
+    private final Meter meter;
 
 
     //_________________________________________________________________________

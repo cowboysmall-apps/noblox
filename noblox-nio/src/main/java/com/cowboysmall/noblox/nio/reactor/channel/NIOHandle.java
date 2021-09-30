@@ -7,8 +7,7 @@ import com.cowboysmall.noblox.reactor.channel.HandleException;
 
 import java.nio.channels.SelectionKey;
 
-
-public class NIOHandle implements Handle<SelectionKey> {
+public class NIOHandle implements Handle {
 
     private final SelectionKey selectionKey;
 

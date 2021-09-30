@@ -2,10 +2,9 @@ package com.cowboysmall.noblox.reactor.channel;
 
 import com.cowboysmall.noblox.reactor.Reactor;
 
+public interface Acceptor {
 
-public interface Acceptor<T> {
-
-    T getImplementation();
+    Object getImplementation();
 
     Channel accept();
 

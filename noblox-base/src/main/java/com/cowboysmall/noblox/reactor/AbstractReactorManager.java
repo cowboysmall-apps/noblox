@@ -6,11 +6,10 @@ import java.util.Queue;
 import static java.lang.Runtime.getRuntime;
 import static java.util.Comparator.comparing;
 
-
 public abstract class AbstractReactorManager implements ReactorManager {
 
-    private Reactor master;
-    private Queue<Reactor> slaves = new PriorityQueue<>(comparing(Reactor::activeConnections));
+    private final Reactor master;
+    private final Queue<Reactor> slaves = new PriorityQueue<>(comparing(Reactor::activeConnections));
 
 
     //_________________________________________________________________________

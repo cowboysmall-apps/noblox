@@ -7,7 +7,6 @@ import com.cowboysmall.noblox.nio.reactor.NIOReactorManager;
 import com.cowboysmall.noblox.nio.reactor.channel.NIOAcceptor;
 import com.cowboysmall.noblox.thread.ThreadPoolExecutor;
 
-
 public class Application {
 
     public static void main(String... args) throws Exception {

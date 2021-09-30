@@ -1,9 +1,8 @@
 package com.cowboysmall.noblox.reactor;
 
+public interface Reactor extends Runnable {
 
-public interface Reactor<T> extends Runnable {
-
-    T getImplementation();
+    Object getImplementation();
 
     void dispatch();
 

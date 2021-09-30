@@ -12,8 +12,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 
-
-public class NIOAcceptor implements Acceptor<ServerSocketChannel> {
+public class NIOAcceptor implements Acceptor {
 
     private final ServerSocketChannel channel;
 

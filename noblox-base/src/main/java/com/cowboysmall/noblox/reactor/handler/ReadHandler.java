@@ -1,19 +1,18 @@
 package com.cowboysmall.noblox.reactor.handler;
 
 import com.codahale.metrics.Meter;
+import com.cowboysmall.noblox.ServerContext;
 import com.cowboysmall.noblox.reactor.channel.Channel;
 import com.cowboysmall.noblox.reactor.channel.Handle;
 import com.cowboysmall.noblox.reactor.request.RequestContext;
-import com.cowboysmall.noblox.ServerContext;
-
 
 public class ReadHandler implements Handler {
 
-    private ServerContext serverContext;
-    private RequestContext requestContext;
-    private Handle handle;
+    private final ServerContext serverContext;
+    private final RequestContext requestContext;
+    private final Handle handle;
 
-    private Meter meter;
+    private final Meter meter;
 
 
     //_________________________________________________________________________

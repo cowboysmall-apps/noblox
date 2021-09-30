@@ -10,7 +10,6 @@ import java.util.Map;
 
 import static java.lang.String.format;
 
-
 public class HttpEchoHandler implements RequestHandler {
 
     private static final String HTTP_RESPONSE = "%s\r\n%s";

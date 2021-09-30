@@ -2,10 +2,9 @@ package com.cowboysmall.noblox.reactor.channel;
 
 import com.cowboysmall.noblox.reactor.Reactor;
 
+public interface Channel {
 
-public interface Channel<T> {
-
-    T getImplementation();
+    Object getImplementation();
 
     byte[] read();
 

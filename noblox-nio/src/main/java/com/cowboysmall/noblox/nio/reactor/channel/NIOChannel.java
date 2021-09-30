@@ -10,8 +10,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
-
-public class NIOChannel implements Channel<SocketChannel> {
+public class NIOChannel implements Channel {
 
     private final ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 

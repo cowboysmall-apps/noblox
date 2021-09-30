@@ -6,7 +6,6 @@ import com.cowboysmall.noblox.reactor.channel.Acceptor;
 import com.cowboysmall.noblox.reactor.request.RequestHandler;
 import com.cowboysmall.noblox.thread.Executor;
 
-
 public class ServerContext {
 
     private final MetricRegistry metricsRegistry = new MetricRegistry();

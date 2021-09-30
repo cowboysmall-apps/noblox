@@ -5,7 +5,6 @@ import com.cowboysmall.noblox.reactor.channel.Acceptor;
 import com.cowboysmall.noblox.reactor.channel.Handle;
 import com.cowboysmall.noblox.reactor.handler.AcceptHandler;
 
-
 public class Server {
 
     private ServerContext serverContext;

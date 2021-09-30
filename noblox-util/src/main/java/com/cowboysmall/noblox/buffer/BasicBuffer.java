@@ -5,10 +5,9 @@ import java.util.List;
 
 import static java.lang.System.arraycopy;
 
-
 public class BasicBuffer implements Buffer {
 
-    private List<byte[]> buffer = new LinkedList<>();
+    private final List<byte[]> buffer = new LinkedList<>();
 
     private int length;
 

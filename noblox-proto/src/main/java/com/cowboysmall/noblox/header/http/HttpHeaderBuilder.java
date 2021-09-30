@@ -10,7 +10,6 @@ import java.util.Map;
 import static java.lang.String.format;
 import static java.lang.String.join;
 
-
 public class HttpHeaderBuilder implements HeaderBuilder {
 
     public static final String STATUS_OK = "200 OK";
