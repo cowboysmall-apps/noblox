@@ -13,3 +13,8 @@ build
 **/*.versionsBackup
 
 .DS_STORE
+
+.classpath
+.factorypath
+.project
+.settings
